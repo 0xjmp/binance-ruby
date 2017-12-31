@@ -1,6 +1,94 @@
 require 'spec_helper'
 
 RSpec.describe Binance::Api::Order do
+  describe '#cancel!' do
+    let(:order_id) { }
+    let(:original_client_order_id) { }
+    let(:new_client_order_id) { }
+    let(:params) do
+      {
+        order_id: order_id, original_client_order_id: original_client_order_id,
+        new_client_order_id: new_client_order_id,
+        recv_window: recv_window, symbol: symbol, timestamp: timestamp 
+      }.delete_if { |key, value| value.nil? }
+    end
+    let(:recv_window) { }
+    let(:symbol) { }
+    let(:timestamp) { }
+
+    subject { Binance::Api::Order.cancel!(params: params) }
+
+    shared_examples 'a valid http request' do
+      let(:query_string) { params.map { |key, value| "#{key}=#{value}" }.join('&') }
+      let(:signature) do
+        signature_string = Binance::Api::Configuration.signed_request_signature(payload: query_string)
+        CGI.escape(signature_string)
+      end
+      context 'when api responds with error' do
+        let!(:request_stub) do
+          stub_request(:delete, "https://api.binance.com/api/v3/order")
+            .with(body: query_string + "&signature=#{signature}")
+            .to_return(status: 400, body: { msg: 'error', code: '400' }.to_json)
+        end
+
+        it { is_expected_block.to raise_error Binance::Api::Error }
+
+        it 'should send api request' do
+          subject rescue Binance::Api::Error
+          expect(request_stub).to have_been_requested
+        end
+      end
+
+      context 'when api succeeds' do
+        let!(:request_stub) do
+          stub_request(:delete, "https://api.binance.com/api/v3/order")
+            .with(body: query_string + "&signature=#{signature}")
+            .to_return(status: 200, body: json_fixture('order-cancel'))
+        end
+
+        it { is_expected.to include(:symbol, :origClientOrderId, :orderId, :clientOrderId) }
+
+        it 'should send api request' do
+          subject rescue Binance::Api::Error
+          expect(request_stub).to have_been_requested
+        end
+      end
+    end
+
+    context 'when symbol is nil' do
+      let(:symbol) { nil }
+
+      it { is_expected_block.to raise_error Binance::Api::Error }
+    end
+
+    context 'when symbol is extant' do
+      let(:symbol) { 'BTCLTC' }
+
+      context 'when timestamp is nil' do
+        let(:timestamp) { nil }
+
+        it { is_expected_block.to raise_error Binance::Api::Error }
+      end
+
+      context 'when timestamp is extant' do
+        let(:timestamp) { Time.now.to_i }
+
+        context 'when order_id & orginal_client_order_id is nil' do
+          let(:order_id) { nil }
+          let(:original_client_order_id) { nil }
+
+          it { is_expected_block.to raise_error Binance::Api::Error }
+        end
+
+        context 'when all required params exist' do
+          let(:order_id) { 2 }
+
+          include_examples 'a valid http request'
+        end
+      end
+    end
+  end
+
   describe '#create!' do
     let(:iceberg_quantity) { }
     let(:new_client_order_id) { }
@@ -56,7 +144,7 @@ RSpec.describe Binance::Api::Order do
         let!(:request_stub) do
           stub_request(:post, "https://api.binance.com/api/v3/order#{'/test' if test}")
             .with(body: request_body + "&signature=#{signature}")
-            .to_return(status: 200, body: json_fixture('new-order'))
+            .to_return(status: 200, body: json_fixture('order-new'))
         end
 
         it { is_expected.to include(:symbol, :orderId, :clientOrderId, :transactTime, :price, :origQty,
@@ -245,6 +333,90 @@ RSpec.describe Binance::Api::Order do
   end
 
   describe '#status!' do
-    pending
+    let(:order_id) { }
+    let(:original_client_order_id) { }
+    let(:params) do
+      {
+        order_id: order_id, original_client_order_id: original_client_order_id,
+        recv_window: recv_window, symbol: symbol, timestamp: timestamp 
+      }.delete_if { |key, value| value.nil? }
+    end
+    let(:recv_window) { }
+    let(:symbol) { }
+    let(:timestamp) { }
+
+    subject { Binance::Api::Order.status!(params) }
+
+    shared_examples 'a valid http request' do
+      let(:query_string) { params.map { |key, value| "#{key}=#{value}" }.join('&') }
+      let(:signature) do
+        signature_string = Binance::Api::Configuration.signed_request_signature(payload: query_string)
+        CGI.escape(signature_string)
+      end
+      context 'when api responds with error' do
+        let!(:request_stub) do
+          stub_request(:get, "https://api.binance.com/api/v3/order")
+            .with(query: query_string + "&signature=#{signature}")
+            .to_return(status: 400, body: { msg: 'error', code: '400' }.to_json)
+        end
+
+        it { is_expected_block.to raise_error Binance::Api::Error }
+
+        it 'should send api request' do
+          subject rescue Binance::Api::Error
+          expect(request_stub).to have_been_requested
+        end
+      end
+
+      context 'when api succeeds' do
+        let!(:request_stub) do
+          stub_request(:get, "https://api.binance.com/api/v3/order")
+            .with(query: query_string + "&signature=#{signature}")
+            .to_return(status: 200, body: json_fixture('order-status'))
+        end
+
+        it { is_expected.to include(:symbol, :orderId, :clientOrderId, :price, :origQty, :executedQty,
+                                    :status, :timeInForce, :type, :side, :stopPrice, :icebergQty, :time,
+                                    :isWorking) }
+
+        it 'should send api request' do
+          subject rescue Binance::Api::Error
+          expect(request_stub).to have_been_requested
+        end
+      end
+    end
+
+    context 'when symbol is nil' do
+      let(:symbol) { nil }
+
+      it { is_expected_block.to raise_error Binance::Api::Error }
+    end
+
+    context 'when symbol is extant' do
+      let(:symbol) { 'BTCLTC' }
+
+      context 'when timestamp is nil' do
+        let(:timestamp) { nil }
+
+        it { is_expected_block.to raise_error Binance::Api::Error }
+      end
+
+      context 'when timestamp is extant' do
+        let(:timestamp) { Time.now.to_i }
+
+        context 'when order_id & orginal_client_order_id is nil' do
+          let(:order_id) { nil }
+          let(:original_client_order_id) { nil }
+
+          it { is_expected_block.to raise_error Binance::Api::Error }
+        end
+
+        context 'when all required params exist' do
+          let(:order_id) { 2 }
+
+          include_examples 'a valid http request'
+        end
+      end
+    end
   end
 end

@@ -2,6 +2,16 @@ module Binance
   module Api
     class Order
       class << self
+        def cancel!(params: {})
+          raise Error.new(message: "symbol is required") if params[:symbol].nil?
+          raise Error.new(message: "timestamp is required") if params[:timestamp].nil?
+          raise Error.new(message: "either order_id or original_client_order_id " \
+            "is required") if params[:order_id].nil? && params[:original_client_order_id].nil?
+          Request.send!(api_key_type: :trading, method: :delete, path: "/api/v3/order",
+                        params: params.delete_if { |key, value| value.nil? },
+                        security_type: :trade)
+        end
+
         def create!(params: {}, test: false)
           ensure_required_create_keys!(params: params)
           flat_params = params.delete_if { |key, value| value.nil? }
