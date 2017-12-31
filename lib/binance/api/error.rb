@@ -1,5 +1,5 @@
 module Binance
-  class Api
+  module Api
     class Error < StandardError
       attr_reader :code, :msg
 
@@ -18,7 +18,9 @@ module Binance
       end
 
       def inspect
-        "Binance::Api error (#{code}): #{msg}"
+        message = "Binance::Api::Error"
+        message += " (#{code})" unless code.nil?
+        message += ": #{msg}"
       end
 
       def message
