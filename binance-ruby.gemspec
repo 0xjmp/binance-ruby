@@ -9,12 +9,12 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Jake Peterson"]
   spec.email         = ["hello@jakenberg.io"]
 
-  spec.summary       = %q{Official Ruby gem for the Binance APIs and Streams.}
+  spec.summary       = %q{Ruby gem for the Binance API.}
   spec.description   = %q{
     - Official Announcements regarding changes, downtime, etc. to the API and Streams will be reported here: https://t.me/binance_api_announcements
     - Streams, endpoints, parameters, payloads, etc. decscribed in the documents in this repository are considered official and supported.
   }
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/jakenberg/binance-ruby"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
