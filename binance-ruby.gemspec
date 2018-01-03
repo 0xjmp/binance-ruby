@@ -10,10 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["hello@jakenberg.io"]
 
   spec.summary       = %q{Ruby gem for the Binance API.}
-  spec.description   = %q{
-    - Official Announcements regarding changes, downtime, etc. to the API and Streams will be reported here: https://t.me/binance_api_announcements
-    - Streams, endpoints, parameters, payloads, etc. decscribed in the documents in this repository are considered official and supported.
-  }
+  spec.description   = %q{Ruby gem for the Binance API.}
   spec.homepage      = "https://github.com/jakenberg/binance-ruby"
   spec.license       = "MIT"
 
