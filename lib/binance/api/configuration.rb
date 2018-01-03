@@ -17,6 +17,10 @@ module Binance
           Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'), key, payload)).strip()
         end
 
+        def timestamp
+          Time.now.to_i
+        end
+
         private
 
         def api_key_types

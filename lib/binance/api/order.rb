@@ -2,6 +2,24 @@ module Binance
   module Api
     class Order
       class << self
+        def all!(limit: 500, order_id: nil, recv_window: nil, symbol: nil)
+          raise Error.new(message: "max limit is 500") unless limit <= 500
+          raise Error.new(message: "symbol is required") if symbol.nil?
+          timestamp = Configuration.timestamp
+          params = { limit: limit, order_id: order_id, recv_window: recv_window, symbol: symbol, timestamp: timestamp }
+          Request.send!(api_key_type: :read_info, path: "/api/v3/allOrders",
+                        params: params.delete_if { |key, value| value.nil? },
+                        security_type: :user_data)
+        end
+
+        # Be careful when accessing without a symbol!
+        def all_open!(recv_window: nil, symbol: nil)
+          timestamp = Configuration.timestamp
+          params = { recv_window: recv_window, symbol: symbol, timestamp: timestamp }
+          Request.send!(api_key_type: :read_info, path: '/api/v3/openOrders',
+                        params: params, security_type: :user_data)
+        end
+
         def cancel!(params: {})
           raise Error.new(message: "symbol is required") if params[:symbol].nil?
           raise Error.new(message: "timestamp is required") if params[:timestamp].nil?
