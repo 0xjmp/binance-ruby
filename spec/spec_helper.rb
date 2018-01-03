@@ -3,12 +3,14 @@ require "bundler/setup"
 require 'webmock/rspec'
 require 'pry'
 require 'simplecov'
+require 'codecov'
 
 # Require support files
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each { |file| require file } 
 
 # Needs to be called before app code is required!
 SimpleCov.start
+SimpleCov.formatter = SimpleCov::Formatter::Codecov
 WebMock.disable_net_connect!
 
 require "binance/api"
