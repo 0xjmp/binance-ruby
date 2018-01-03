@@ -9,11 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Jake Peterson"]
   spec.email         = ["hello@jakenberg.io"]
 
-  spec.summary       = %q{Ruby gem for the Binance API.}
-  spec.description   = %q{
-    [![Circle CI](https://circleci.com/gh/Jakenberg/binance-ruby.svg?style=shield)](https://circleci.com/gh/Jakenberg/binance-ruby) [![codecov](https://codecov.io/gh/Jakenberg/binance-ruby/branch/master/graph/badge.svg)](https://codecov.io/gh/Jakenberg/binance-ruby)
-    Ruby gem for the Binance API.
-  }
+  spec.summary       = "binance-ruby-#{Binance::Api::VERSION}"
+  spec.description   = %q{Ruby wrapper for the Binance API.}
   spec.homepage      = "https://github.com/jakenberg/binance-ruby"
   spec.license       = "MIT"
 
