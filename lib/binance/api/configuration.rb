@@ -1,5 +1,5 @@
 require 'openssl'
-require 'Base64'
+require 'base64'
 
 module Binance
   module Api
