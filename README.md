@@ -79,10 +79,14 @@ For more information, please refer to the [official Rest API documentation](http
 [Jake Peterson](https://jakenberg.io)
 
 I drink beer 😉
+
 **BTC**: `1EZTj5rEaKE9dEBjR1wiismwma4XpXtLBz`
+
 **ETH**: `0xf61195dcb1e89f139114e599cf1dd37dd8b7b96a`
+
 **LTC**: `LL3Nf7CmLoFeLENSKN6WhgPNVuxjzgh2eV`
-**BCH**: Bcash. LOL
+
+**BCH**: [Bcash. LOL](https://www.youtube.com/watch?v=oCOjCEth6xI)
 
 ## Development
 
