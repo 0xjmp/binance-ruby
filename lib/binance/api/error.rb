@@ -21,6 +21,7 @@ module Binance
         message = "Binance::Api::Error"
         message += " (#{code})" unless code.nil?
         message += ": #{msg}"
+        message += "\nbacktrace: #{backtrace}"
       end
 
       def message

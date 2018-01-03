@@ -12,14 +12,14 @@ RSpec.describe Binance::Api do
     end
   end
 
-  describe '#candlesticks' do
+  describe '#candlesticks!' do
     let(:end_time) { '' }
     let(:interval) { :daily } # TODO: confirm enums
     let(:limit) { 100 }
     let(:start_time) { '' }
     let(:symbol) { 'BTCLTC' }
 
-    subject { Binance::Api.candlesticks(end_time: end_time, interval: interval,
+    subject { Binance::Api.candlesticks!(end_time: end_time, interval: interval,
                                         limit: limit, start_time: start_time,
                                         symbol: symbol,) }
 
@@ -60,15 +60,14 @@ RSpec.describe Binance::Api do
     end
   end
 
-
-  describe '#compressed_aggregate_trades' do
+  describe '#compressed_aggregate_trades!' do
     let(:from_id) { '' }
     let(:end_time) { '' }
     let(:limit) { 100 }
     let(:start_time) { '' }
     let(:symbol) { 'BTCLTC' }
 
-    subject { Binance::Api.compressed_aggregate_trades(from_id: from_id, end_time: end_time, limit: limit,
+    subject { Binance::Api.compressed_aggregate_trades!(from_id: from_id, end_time: end_time, limit: limit,
                                                        start_time: start_time, symbol: symbol) }
 
     context 'when symbol is nil' do
@@ -104,11 +103,11 @@ RSpec.describe Binance::Api do
     end
   end
 
-  describe '#depth' do
+  describe '#depth!' do
     let(:limit) { 100 }
     let(:symbol) { 'BTCLTC' }
 
-    subject { Binance::Api.depth(symbol: symbol, limit: limit) }
+    subject { Binance::Api.depth!(symbol: symbol, limit: limit) }
 
     context 'when symbol is nil' do
       let(:symbol) { nil }
@@ -141,8 +140,8 @@ RSpec.describe Binance::Api do
     end
   end
 
-  describe '#exchange_info' do
-    subject { Binance::Api.exchange_info }
+  describe '#exchange_info!' do
+    subject { Binance::Api.exchange_info! }
 
     context 'when api responds with error' do
       let!(:request_stub) do
@@ -167,12 +166,12 @@ RSpec.describe Binance::Api do
     end
   end
 
-  describe '#historical_trades' do
+  describe '#historical_trades!' do
     let(:from_id) { '' }
     let(:limit) { 500 }
     let(:symbol) { 'BTCLTC' }
 
-    subject { Binance::Api.historical_trades(from_id: from_id, symbol: symbol, limit: limit) }
+    subject { Binance::Api.historical_trades!(from_id: from_id, symbol: symbol, limit: limit) }
 
     context 'when symbol is nil' do
       let(:symbol) { nil }
@@ -208,8 +207,8 @@ RSpec.describe Binance::Api do
     end
   end
 
-  describe '#ping' do
-    subject { Binance::Api.ping }
+  describe '#ping!' do
+    subject { Binance::Api.ping! }
 
     context 'when api responds with error' do
       let!(:request_stub) do
@@ -232,7 +231,7 @@ RSpec.describe Binance::Api do
     end
   end
 
-  describe '#ticker' do
+  describe '#ticker!' do
     let!(:request_stub) do
       url = "https://api.binance.com/api/v3/ticker/#{type.to_s.camelcase(:lower)}" 
       url += "?symbol=#{symbol}" if symbol
@@ -240,7 +239,7 @@ RSpec.describe Binance::Api do
     end
     let(:symbol) { nil }
 
-    subject { Binance::Api.ticker(symbol: symbol, type: type) }
+    subject { Binance::Api.ticker!(symbol: symbol, type: type) }
 
     shared_examples 'a valid ticker request' do
       shared_examples 'valid api responses' do
@@ -342,8 +341,8 @@ RSpec.describe Binance::Api do
     end
   end
 
-  describe '#time' do
-    subject { Binance::Api.time }
+  describe '#time!' do
+    subject { Binance::Api.time! }
 
     context 'when api responds with error' do
       let!(:request_stub) do
@@ -368,11 +367,11 @@ RSpec.describe Binance::Api do
     end
   end
 
-  describe '#trades' do
+  describe '#trades!' do
     let(:limit) { 500 }
     let(:symbol) { 'BTCLTC' }
 
-    subject { Binance::Api.trades(symbol: symbol, limit: limit) }
+    subject { Binance::Api.trades!(symbol: symbol, limit: limit) }
 
     context 'when symbol is nil' do
       let(:symbol) { nil }
