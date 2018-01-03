@@ -43,34 +43,34 @@ I highly recommend reading the [official Binance documentation](https://github.c
 
 ### Binance::Api
 
-- `candlesticks!`: Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time.
-- `compressed_aggregate_trades!`: Get compressed, aggregate trades. Trades that fill at the time, from the same order, with the same price will have the quantity aggregated.
-- `depth!`: Get your order book.
-- `exchange_info!`: Current exchange trading rules and symbol information.
-- `historical_trades!`: Get older trades.
-- `ping!`: Test connectivity to the Rest API.
-- `ticker!`: Price change statistics. **Careful** when accessing this with no symbol.
-- `time!`: Test connectivity to the Rest API and get the current server time.
-- `trades!`: Get recent trades (up to last 500).
+- [`candlesticks!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#klinecandlestick-data): Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time.
+- [`compressed_aggregate_trades!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#compressedaggregate-trades-list): Get compressed, aggregate trades. Trades that fill at the time, from the same order, with the same price will have the quantity aggregated.
+- [`depth!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#order-book): Get your order book.
+- [`exchange_info!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#exchange-information): Current exchange trading rules and symbol information.
+- [`historical_trades!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#old-trade-lookup-market_data): Get older trades.
+- [`ping!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#test-connectivity): Test connectivity to the Rest API.
+- [`ticker!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#24hr-ticker-price-change-statistics): Price change statistics. **Careful** when accessing this with no symbol.
+- [`time!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#check-server-time): Test connectivity to the Rest API and get the current server time.
+- [`trades!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#recent-trades-list): Get recent trades (up to last 500).
 
 ### Binance::Api::Account
 
-- `info!`: Get current account information.
-- `trades!`: Get trades for a specific account and symbol.
+- [`info!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#account-information-user_data): Get current account information.
+- [`trades!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#account-trade-list-user_data): Get trades for a specific account and symbol.
 
 ### Binance::Api::DataStream
 
-- `start!`: Start a new user data stream. The stream will close after 60 minutes unless a keepalive is sent.
-- `keepalive!`: Keepalive a user data stream to prevent a time out. User data streams will close after 60 minutes. It's recommended to send a ping about every 30 minutes.
-- `stop!`: Close out a user data stream.
+- [`start!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#start-user-data-stream-user_stream): Start a new user data stream. The stream will close after 60 minutes unless a keepalive is sent.
+- [`keepalive!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#keepalive-user-data-stream-user_stream): Keepalive a user data stream to prevent a time out. User data streams will close after 60 minutes. It's recommended to send a ping about every 30 minutes.
+- [`stop!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#close-user-data-stream-user_stream): Close out a user data stream.
 
 ### Binance::Api::Order
 
-- `all!`: Get all account orders; active, canceled, or filled.
-- `all_open!`: Get all open orders on a symbol. **Careful** when accessing this with no symbol.
-- `cancel!`: Cancel an active order.
-- `create!`: Send in a new order. Use `test: true` for test orders.
-- `status!`: Check an order's status.
+- [`all!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#all-orders-user_data): Get all account orders; active, canceled, or filled.
+- [`all_open!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#current-open-orders-user_data): Get all open orders on a symbol. **Careful** when accessing this with no symbol.
+- [`cancel!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#cancel-order-trade): Cancel an active order.
+- [`create!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#new-order--trade): Send in a new order. Use `test: true` for test orders.
+- [`status!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#query-order-user_data): Check an order's status.
 
 For more information, please refer to the [official Rest API documentation](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md) written by the Binance team.
 
