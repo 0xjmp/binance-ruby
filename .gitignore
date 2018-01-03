@@ -12,4 +12,4 @@
 # rspec failure tracking
 .rspec_status
 
-.env*
+.env
