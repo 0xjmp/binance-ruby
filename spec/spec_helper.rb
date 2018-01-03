@@ -2,10 +2,12 @@ require 'dotenv/load'
 require "bundler/setup"
 require 'webmock/rspec'
 require 'pry'
+require 'simplecov'
 require "binance/api"
 
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each { |file| require file } 
 
+SimpleCov.start
 WebMock.disable_net_connect!
 
 RSpec.configure do |config|
