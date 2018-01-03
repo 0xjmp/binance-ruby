@@ -2,50 +2,69 @@ module Binance
   module Api
     class Order
       class << self
-        def all!(limit: 500, order_id: nil, recv_window: nil, symbol: nil)
+        def all!(limit: 500, order_id: nil, recv_window: 5000, symbol: nil)
           raise Error.new(message: "max limit is 500") unless limit <= 500
           raise Error.new(message: "symbol is required") if symbol.nil?
           timestamp = Configuration.timestamp
-          params = { limit: limit, order_id: order_id, recv_window: recv_window, symbol: symbol, timestamp: timestamp }
+          params = { limit: limit, orderId: order_id, recvWindow: recv_window, symbol: symbol, timestamp: timestamp }
           Request.send!(api_key_type: :read_info, path: "/api/v3/allOrders",
                         params: params.delete_if { |key, value| value.nil? },
                         security_type: :user_data)
         end
 
         # Be careful when accessing without a symbol!
-        def all_open!(recv_window: nil, symbol: nil)
+        def all_open!(recv_window: 5000, symbol: nil)
           timestamp = Configuration.timestamp
-          params = { recv_window: recv_window, symbol: symbol, timestamp: timestamp }
+          params = { recvWindow: recv_window, symbol: symbol, timestamp: timestamp }
           Request.send!(api_key_type: :read_info, path: '/api/v3/openOrders',
                         params: params, security_type: :user_data)
         end
 
-        def cancel!(params: {})
-          raise Error.new(message: "symbol is required") if params[:symbol].nil?
-          raise Error.new(message: "timestamp is required") if params[:timestamp].nil?
+        def cancel!(order_id: nil, original_client_order_id: nil, new_client_order_id: nil, recv_window: nil, symbol: nil)
+          raise Error.new(message: "symbol is required") if symbol.nil?
           raise Error.new(message: "either order_id or original_client_order_id " \
-            "is required") if params[:order_id].nil? && params[:original_client_order_id].nil?
+            "is required") if order_id.nil? && original_client_order_id.nil?
+          timestamp = Configuration.timestamp
+          params = { orderId: order_id, origClientOrderId: original_client_order_id,
+                     newClientOrderId: new_client_order_id, recvWindow: recv_window,
+                     symbol: symbol, timestamp: timestamp }.delete_if { |key, value| value.nil? }
           Request.send!(api_key_type: :trading, method: :delete, path: "/api/v3/order",
-                        params: params.delete_if { |key, value| value.nil? },
-                        security_type: :trade)
+                        params: params, security_type: :trade)
         end
 
-        def create!(params: {}, test: false)
-          ensure_required_create_keys!(params: params)
-          flat_params = params.delete_if { |key, value| value.nil? }
+        def create!(iceberg_quantity: nil, new_client_order_id: nil, new_order_response_type: nil,
+                    price: nil, quantity: nil, recv_window: nil, stop_price: nil, symbol: nil,
+                    side: nil, type: nil, time_in_force: nil, test: false)
+          timestamp = Configuration.timestamp
+          ensure_required_create_keys!(params: {
+            iceberg_quantity: iceberg_quantity, new_client_order_id: new_client_order_id,
+            new_order_response_type: new_order_response_type, price: price,
+            quantity: quantity, recv_window: recv_window, stop_price: stop_price,
+            symbol: symbol, side: side, type: type, time_in_force: time_in_force,
+            timestamp: timestamp
+          })
+          params = { 
+            icebergQty: iceberg_quantity, newClientOrderId: new_client_order_id,
+            newOrderRespType: new_order_response_type, price: price, quantity: quantity,
+            recvWindow: recv_window, stopPrice: stop_price, symbol: symbol, side: side,
+            type: type, timeInForce: time_in_force, timestamp: timestamp
+          }.delete_if { |key, value| value.nil? }
           path = "/api/v3/order#{'/test' if test}"
           Request.send!(api_key_type: :trading, method: :post, path: path,
-                        params: flat_params, security_type: :trade)
+                        params: params, security_type: :trade)
         end
 
-        def status!(params = {})
-          raise Error.new(message: "symbol is required") if params[:symbol].nil?
-          raise Error.new(message: "timestamp is required") if params[:timestamp].nil?
+        def status!(order_id: nil, original_client_order_id: nil, recv_window: nil, symbol: nil)
+          raise Error.new(message: "symbol is required") if symbol.nil?
           raise Error.new(message: "either order_id or original_client_order_id " \
-            "is required") if params[:order_id].nil? && params[:original_client_order_id].nil?
+            "is required") if order_id.nil? && original_client_order_id.nil?
+          timestamp = Configuration.timestamp
+          params = {
+            orderId: order_id, origClientOrderId: original_client_order_id, recvWindow: recv_window,
+            symbol: symbol, timestamp: timestamp
+          }.delete_if { |key, value| value.nil? }
           Request.send!(api_key_type: :trading, path: "/api/v3/order",
-                        params: params.delete_if { |key, value| value.nil? },
-                        security_type: :user_data)
+                        params: params, security_type: :user_data)
         end
 
         private

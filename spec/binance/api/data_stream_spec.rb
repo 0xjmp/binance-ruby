@@ -5,7 +5,7 @@ RSpec.describe Binance::Api::DataStream do
   let(:request_body) { params.map { |key, value| "#{key}=#{value}" }.join('&') }
 
   describe '#keepalive!' do
-    let(:params) { { listen_key: listen_key } }
+    let(:params) { { listenKey: listen_key } }
 
     subject { Binance::Api::DataStream.keepalive!(listen_key: listen_key) }
 

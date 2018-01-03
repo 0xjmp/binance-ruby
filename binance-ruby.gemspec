@@ -41,6 +41,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'dotenv-rails', '~> 2.2.0'
   spec.add_development_dependency 'codecov', '~> 0.1'
 
+  spec.add_dependency 'awrence', '~> 1.0'
   spec.add_dependency 'httparty', '~> 0.15'
   spec.add_dependency 'activesupport-core-ext', '~> 4.0.0'
 end

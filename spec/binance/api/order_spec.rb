@@ -4,7 +4,7 @@ RSpec.describe Binance::Api::Order do
   describe '#all!' do
     let(:limit) { 500 }
     let(:order_id) { }
-    let(:params) { { limit: limit, order_id: order_id, recv_window: recv_window, symbol: symbol, timestamp: timestamp } }
+    let(:params) { { limit: limit, orderId: order_id, recvWindow: recv_window, symbol: symbol, timestamp: timestamp } }
     let(:query_string) { params.delete_if { |key, value| value.nil? }.map { |key, value| "#{key}=#{value}" }.join('&') }
     let(:recv_window) { }
     let(:signature) do
@@ -68,7 +68,7 @@ RSpec.describe Binance::Api::Order do
   end
 
   describe '#all_open!' do
-    let(:params) { { recv_window: recv_window, symbol: symbol, timestamp: timestamp } }
+    let(:params) { { recvWindow: recv_window, symbol: symbol, timestamp: timestamp } }
     let(:query_string) { params.map { |key, value| "#{key}=#{value}" }.join('&') }
     let(:recv_window) { }
     let(:signature) do
@@ -121,16 +121,20 @@ RSpec.describe Binance::Api::Order do
     let(:new_client_order_id) { }
     let(:params) do
       {
-        order_id: order_id, original_client_order_id: original_client_order_id,
-        new_client_order_id: new_client_order_id,
-        recv_window: recv_window, symbol: symbol, timestamp: timestamp 
+        orderId: order_id, origClientOrderId: original_client_order_id,
+        newClientOrderId: new_client_order_id,
+        recvWindow: recv_window, symbol: symbol, timestamp: timestamp 
       }.delete_if { |key, value| value.nil? }
     end
     let(:recv_window) { }
     let(:symbol) { }
-    let(:timestamp) { }
+    let(:timestamp) { Binance::Api::Configuration.timestamp }
 
-    subject { Binance::Api::Order.cancel!(params: params) }
+    subject { Binance::Api::Order.cancel!(
+      order_id: order_id, original_client_order_id: original_client_order_id,
+      new_client_order_id: new_client_order_id,
+      recv_window: recv_window, symbol: symbol
+    )}
 
     shared_examples 'a valid http request' do
       let(:query_string) { params.map { |key, value| "#{key}=#{value}" }.join('&') }
@@ -214,24 +218,24 @@ RSpec.describe Binance::Api::Order do
     let(:stop_price) { }
     let(:symbol) { }
     let(:time_in_force) { }
-    let(:timestamp) { }
+    let(:timestamp) { Configuration.timestamp }
     let(:type) { }
 
     subject do
-      Binance::Api::Order.create!(params: { iceberg_quantity: iceberg_quantity, new_client_order_id: new_client_order_id,
+      Binance::Api::Order.create!(iceberg_quantity: iceberg_quantity, new_client_order_id: new_client_order_id,
                               new_order_response_type: new_order_response_type, price: price,
                               quantity: quantity, recv_window: recv_window, stop_price: stop_price,
                               symbol: symbol, side: side, type: type, time_in_force: time_in_force,
-                              timestamp: timestamp }, test: test)
+                              test: test)
     end
 
     shared_examples 'a valid http request' do
       let(:params) { {
-        iceberg_quantity: iceberg_quantity, new_client_order_id: new_client_order_id,
-        new_order_response_type: new_order_response_type, price: price,
-        quantity: quantity, recv_window: recv_window, 
-        stop_price: stop_price, symbol: symbol, side: side, type: type,
-        time_in_force: time_in_force, timestamp: timestamp
+        icebergQty: iceberg_quantity, newClientOrderId: new_client_order_id,
+        newOrderRespType: new_order_response_type, price: price,
+        quantity: quantity, recvWindow: recv_window, 
+        stopPrice: stop_price, symbol: symbol, side: side, type: type,
+        timeInForce: time_in_force, timestamp: timestamp
       }.delete_if { |key, value| value.nil? } }
       let(:request_body) { params.map { |key, value| "#{key}=#{value}" }.join('&') }
       let(:signature) do
@@ -451,15 +455,15 @@ RSpec.describe Binance::Api::Order do
     let(:original_client_order_id) { }
     let(:params) do
       {
-        order_id: order_id, original_client_order_id: original_client_order_id,
-        recv_window: recv_window, symbol: symbol, timestamp: timestamp 
+        orderId: order_id, origClientOrderId: original_client_order_id,
+        recvWindow: recv_window, symbol: symbol, timestamp: timestamp 
       }.delete_if { |key, value| value.nil? }
     end
     let(:recv_window) { }
     let(:symbol) { }
-    let(:timestamp) { }
+    let(:timestamp) { Binance::Api::Configuration.timestamp }
 
-    subject { Binance::Api::Order.status!(params) }
+    subject { Binance::Api::Order.status!(order_id: order_id, original_client_order_id: original_client_order_id, recv_window: recv_window, symbol: symbol) }
 
     shared_examples 'a valid http request' do
       let(:query_string) { params.map { |key, value| "#{key}=#{value}" }.join('&') }
@@ -509,27 +513,17 @@ RSpec.describe Binance::Api::Order do
     context 'when symbol is extant' do
       let(:symbol) { 'BTCLTC' }
 
-      context 'when timestamp is nil' do
-        let(:timestamp) { nil }
+      context 'when order_id & orginal_client_order_id is nil' do
+        let(:order_id) { nil }
+        let(:original_client_order_id) { nil }
 
         it { is_expected_block.to raise_error Binance::Api::Error }
       end
 
-      context 'when timestamp is extant' do
-        let(:timestamp) { Time.now.to_i }
+      context 'when all required params exist' do
+        let(:order_id) { 2 }
 
-        context 'when order_id & orginal_client_order_id is nil' do
-          let(:order_id) { nil }
-          let(:original_client_order_id) { nil }
-
-          it { is_expected_block.to raise_error Binance::Api::Error }
-        end
-
-        context 'when all required params exist' do
-          let(:order_id) { 2 }
-
-          include_examples 'a valid http request'
-        end
+        include_examples 'a valid http request'
       end
     end
   end

@@ -1,4 +1,5 @@
 require 'active_support/core_ext/string'
+require 'awrence'
 require 'httparty'
 require 'binance/api/account'
 require 'binance/api/configuration'

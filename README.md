@@ -3,6 +3,7 @@
 ## TODO
 - Signed requests.
 - Convert milliseconds to ruby DateTime.
+- CodeCov account & badge.
 
 ## Installation
 
