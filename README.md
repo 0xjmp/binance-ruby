@@ -72,6 +72,8 @@ I highly recommend reading the [official Binance documentation](https://github.c
 - [`create!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#new-order--trade): Send in a new order. Use `test: true` for test orders.
 - [`status!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#query-order-user_data): Check an order's status.
 
+See the [rubydoc](http://www.rubydoc.info/gems/binance-ruby/0.1.2/Binance) for information about parameters for each method listed above.
+
 For more information, please refer to the [official Rest API documentation](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md) written by the Binance team.
 
 ## Author
