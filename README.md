@@ -100,7 +100,6 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/jakenb
 
 ### TODO
 - Convert milliseconds to ruby DateTime.
-- CodeCov account & badge.
 
 ## License
 
