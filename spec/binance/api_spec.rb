@@ -232,11 +232,6 @@ RSpec.describe Binance::Api do
   end
 
   describe '#ticker!' do
-    let!(:request_stub) do
-      url = "https://api.binance.com/api/v3/ticker/#{type.to_s.camelcase(:lower)}" 
-      url += "?symbol=#{symbol}" if symbol
-      stub_request(:get, url).to_return(stub_response)
-    end
     let(:symbol) { nil }
 
     subject { Binance::Api.ticker!(symbol: symbol, type: type) }
@@ -279,6 +274,11 @@ RSpec.describe Binance::Api do
     end
 
     context 'when type is daily' do
+      let!(:request_stub) do
+        url = "https://api.binance.com/api/v1/ticker/24hr" 
+        url += "?symbol=#{symbol}" if symbol
+        stub_request(:get, url).to_return(stub_response)
+      end
       let(:type) { :daily }
 
       context 'when json response is singular' do
@@ -302,6 +302,11 @@ RSpec.describe Binance::Api do
     end
 
     context 'when type is price' do
+      let!(:request_stub) do
+        url = "https://api.binance.com/api/v3/ticker/price" 
+        url += "?symbol=#{symbol}" if symbol
+        stub_request(:get, url).to_return(stub_response)
+      end
       let(:type) { :price }
 
       context 'when json response is singular' do
@@ -321,6 +326,11 @@ RSpec.describe Binance::Api do
     end
 
     context 'when type is book_ticker' do
+      let!(:request_stub) do
+        url = "https://api.binance.com/api/v3/ticker/bookTicker" 
+        url += "?symbol=#{symbol}" if symbol
+        stub_request(:get, url).to_return(stub_response)
+      end
       let(:type) { :book_ticker }
 
       context 'when json response is singular' do

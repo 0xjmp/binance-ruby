@@ -5,10 +5,8 @@ module Binance
 
       class << self
         # https://github.com/binance-exchange/binance-official-api-docs/blob/master/errors.md
-        def is_error_response?(json:)
-          return false if json.is_a? Array
-          code = json[:code]&.to_i
-          code && code >= 400
+        def is_error_response?(response:)
+          response.code >= 400
         end
       end
 
@@ -20,8 +18,7 @@ module Binance
       def inspect
         message = "Binance::Api::Error"
         message += " (#{code})" unless code.nil?
-        message += ": #{msg}"
-        message += "\nbacktrace: #{backtrace}"
+        message += ": #{msg}" unless msg.nil?
       end
 
       def message

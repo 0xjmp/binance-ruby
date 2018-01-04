@@ -35,14 +35,15 @@ module Binance
 
         def default_headers(api_key_type:, security_type:)
           headers = {}
+          headers['Content-Type'] = 'application/json; charset=utf-8'
           headers['X-MBX-APIKEY'] = Configuration.api_key(type: api_key_type) unless security_type == :none
           headers
         end
 
-        def process!(response: '')
-          json = JSON.parse(response, symbolize_names: true)
-          raise Error.new(json: json) if Error.is_error_response?(json: json)
-          json 
+        def process!(response:)
+          json = JSON.parse(response.body, symbolize_names: true)
+          raise Error.new(json: json) if Error.is_error_response?(response: response)
+          json
         end
 
         def security_types

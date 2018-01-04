@@ -1,14 +1,3 @@
-require 'active_support/core_ext/string'
-require 'awrence'
-require 'httparty'
-require 'binance/api/account'
-require 'binance/api/configuration'
-require 'binance/api/data_stream'
-require 'binance/api/error'
-require 'binance/api/order'
-require 'binance/api/request'
-require "binance/api/version"
-
 module Binance
   module Api
     class << self
@@ -51,7 +40,7 @@ module Binance
         error_message = "type must be one of: #{ticker_types.join(', ')}. #{type} was provided."
         raise Error.new(message: error_message) unless ticker_types.include? ticker_type
         params = symbol ? { symbol: symbol } : {}
-        Request.send!(api_key_type: :read_info, path: "/api/v3/ticker/#{type.to_s.camelcase(:lower)}", params: params)
+        Request.send!(api_key_type: :read_info, path: ticker_path(type: type), params: params)
       end
 
       def time!
@@ -65,6 +54,17 @@ module Binance
       end
 
       private
+
+      def ticker_path(type:)
+        case type
+        when :daily
+          '/api/v1/ticker/24hr'
+        when :price, :book_ticker
+          "/api/v3/ticker/#{type.to_s.camelize(:lower)}"
+        else
+          raise Error.new(message: "invalid type #{type}")
+        end
+      end
 
       def ticker_types
         [:daily, :price, :book_ticker].freeze

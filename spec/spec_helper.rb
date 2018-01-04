@@ -13,7 +13,7 @@ SimpleCov.start
 SimpleCov.formatter = SimpleCov::Formatter::Codecov
 WebMock.disable_net_connect!
 
-require "binance/api"
+require "binance-ruby"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
