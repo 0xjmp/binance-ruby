@@ -39,9 +39,18 @@ If any one of these keys are not defined, `binance-ruby` will fallback to `BINAN
 
 ## Usage
 
-I highly recommend reading the [official Binance documentation](https://github.com/binance-exchange/binance-official-api-docs) before using this gem. Anything missed here is surely well explained there.
+### Examples
+```ruby
+# Test that API is responding.
+Binance::Api.ping! # => {}
 
-### Binance::Api
+# Create a new order.
+Binance::Api::Order.create!(price: '0.001', quantity: '100.0', side: 'BUY', symbol: 'XRPBTC', time_in_force: 'GTC', type: 'STOP_LIMIT')
+```
+
+I would highly recommend reading the [official Binance documentation](https://github.com/binance-exchange/binance-official-api-docs) before using this gem. Anything missed here is surely well explained there.
+
+### Binance::Api class methods
 
 - [`candlesticks!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#klinecandlestick-data): Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time.
 - [`compressed_aggregate_trades!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#compressedaggregate-trades-list): Get compressed, aggregate trades. Trades that fill at the time, from the same order, with the same price will have the quantity aggregated.
@@ -53,18 +62,18 @@ I highly recommend reading the [official Binance documentation](https://github.c
 - [`time!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#check-server-time): Test connectivity to the Rest API and get the current server time.
 - [`trades!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#recent-trades-list): Get recent trades (up to last 500).
 
-### Binance::Api::Account
+### Binance::Api::Account class methods
 
 - [`info!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#account-information-user_data): Get current account information.
 - [`trades!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#account-trade-list-user_data): Get trades for a specific account and symbol.
 
-### Binance::Api::DataStream
+### Binance::Api::DataStream class methods
 
 - [`start!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#start-user-data-stream-user_stream): Start a new user data stream. The stream will close after 60 minutes unless a keepalive is sent.
 - [`keepalive!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#keepalive-user-data-stream-user_stream): Keepalive a user data stream to prevent a time out. User data streams will close after 60 minutes. It's recommended to send a ping about every 30 minutes.
 - [`stop!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#close-user-data-stream-user_stream): Close out a user data stream.
 
-### Binance::Api::Order
+### Binance::Api::Order class methods
 
 - [`all!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#all-orders-user_data): Get all account orders; active, canceled, or filled.
 - [`all_open!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#current-open-orders-user_data): Get all open orders on a symbol. **Careful** when accessing this with no symbol.
