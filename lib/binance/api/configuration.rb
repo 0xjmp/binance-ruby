@@ -12,13 +12,14 @@ module Binance
 
         def signed_request_signature(payload:)
           key = ENV['BINANCE_SECRET_KEY']
-          raise Error.new(message: "environment variable 'BINANCE_SECRET_KEY' is required "\
+          raise Error.new(message: "environment variable 'BINANCE_SECRET_KEY' is required " \
             "for signed requests.") unless key
-          Base64.encode64(OpenSSL::HMAC.digest(OpenSSL::Digest.new('sha256'), key, payload)).strip()
+          digest = OpenSSL::Digest::SHA256.new
+          OpenSSL::HMAC.hexdigest(digest, key, payload)
         end
 
         def timestamp
-          Time.now.to_i
+          Time.now.utc.strftime('%s%3N')
         end
 
         private

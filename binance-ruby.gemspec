@@ -28,15 +28,13 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_development_dependency "bundler", "~> 1.15"
-  spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
-  spec.add_development_dependency "webmock", '~> 3.0'
-  spec.add_development_dependency 'pry', '~> 0.11.0'
-  spec.add_development_dependency 'dotenv-rails', '~> 2.2.0'
   spec.add_development_dependency 'codecov', '~> 0.1'
+  spec.add_development_dependency 'dotenv', '~> 2.2'
+  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency 'timecop', '~> 0.9'
+  spec.add_development_dependency "webmock", '~> 3.0'
 
+  spec.add_dependency 'activesupport', '~> 5.1'
   spec.add_dependency 'awrence', '~> 1.0'
   spec.add_dependency 'httparty', '~> 0.15'
-  spec.add_dependency 'activesupport-core-ext', '~> 4.0.0'
 end

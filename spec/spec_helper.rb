@@ -1,9 +1,9 @@
 require 'dotenv/load'
 require "bundler/setup"
 require 'webmock/rspec'
-require 'pry'
 require 'simplecov'
 require 'codecov'
+require 'timecop'
 
 # Require support files
 Dir[File.expand_path(File.join(File.dirname(__FILE__),'support','**','*.rb'))].each { |file| require file } 
@@ -27,4 +27,8 @@ RSpec.configure do |config|
   end
 
   config.include RSpecHelpers
+
+  config.before do
+    Timecop.freeze(Time.now)
+  end
 end

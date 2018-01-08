@@ -8,13 +8,14 @@ RSpec.describe Binance::Api::Order do
     let(:query_string) { params.delete_if { |key, value| value.nil? }.map { |key, value| "#{key}=#{value}" }.join('&') }
     let(:recv_window) { }
     let(:signature) do
-      signature_string = Binance::Api::Configuration.signed_request_signature(payload: query_string)
-      CGI.escape(signature_string)
+      Binance::Api::Configuration.signed_request_signature(payload: query_string)
     end
     let(:symbol) { }
     let(:timestamp) { Binance::Api::Configuration.timestamp }
 
-    subject { Binance::Api::Order.all!(limit: limit, order_id: order_id, recv_window: recv_window, symbol: symbol) }
+    subject do
+      Binance::Api::Order.all!(limit: limit, order_id: order_id, recv_window: recv_window, symbol: symbol)
+    end
 
     context 'when limit is higher than max' do
       let(:limit) { 501 }
@@ -72,8 +73,7 @@ RSpec.describe Binance::Api::Order do
     let(:query_string) { params.map { |key, value| "#{key}=#{value}" }.join('&') }
     let(:recv_window) { }
     let(:signature) do
-      signature_string = Binance::Api::Configuration.signed_request_signature(payload: query_string)
-      CGI.escape(signature_string)
+      Binance::Api::Configuration.signed_request_signature(payload: query_string)
     end
     let(:symbol) { }
     let(:timestamp) { Binance::Api::Configuration.timestamp }
@@ -139,8 +139,7 @@ RSpec.describe Binance::Api::Order do
     shared_examples 'a valid http request' do
       let(:query_string) { params.map { |key, value| "#{key}=#{value}" }.join('&') }
       let(:signature) do
-        signature_string = Binance::Api::Configuration.signed_request_signature(payload: query_string)
-        CGI.escape(signature_string)
+        Binance::Api::Configuration.signed_request_signature(payload: query_string)
       end
       context 'when api responds with error' do
         let!(:request_stub) do
@@ -189,7 +188,7 @@ RSpec.describe Binance::Api::Order do
       end
 
       context 'when timestamp is extant' do
-        let(:timestamp) { Time.now.to_i }
+        let(:timestamp) { Binance::Api::Configuration.timestamp }
 
         context 'when order_id & orginal_client_order_id is nil' do
           let(:order_id) { nil }
@@ -239,8 +238,7 @@ RSpec.describe Binance::Api::Order do
       }.delete_if { |key, value| value.nil? } }
       let(:request_body) { params.map { |key, value| "#{key}=#{value}" }.join('&') }
       let(:signature) do
-        signature_string = Binance::Api::Configuration.signed_request_signature(payload: request_body)
-        CGI.escape(signature_string)
+        Binance::Api::Configuration.signed_request_signature(payload: request_body)
       end
 
       context 'when api responds with error' do
@@ -311,7 +309,7 @@ RSpec.describe Binance::Api::Order do
         let(:quantity) { 500 }
         let(:side) { 'BUY' }
         let(:symbol) { 'BTCLTC' }
-        let(:timestamp) { Time.now.to_i }
+        let(:timestamp) { Binance::Api::Configuration.timestamp }
 
         context 'and type is limit' do
           let(:type) { :limit }
@@ -468,8 +466,7 @@ RSpec.describe Binance::Api::Order do
     shared_examples 'a valid http request' do
       let(:query_string) { params.map { |key, value| "#{key}=#{value}" }.join('&') }
       let(:signature) do
-        signature_string = Binance::Api::Configuration.signed_request_signature(payload: query_string)
-        CGI.escape(signature_string)
+        Binance::Api::Configuration.signed_request_signature(payload: query_string)
       end
       context 'when api responds with error' do
         let!(:request_stub) do
