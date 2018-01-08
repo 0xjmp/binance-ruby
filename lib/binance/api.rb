@@ -61,8 +61,6 @@ module Binance
           '/api/v1/ticker/24hr'
         when :price, :book_ticker
           "/api/v3/ticker/#{type.to_s.camelize(:lower)}"
-        else
-          raise Error.new(message: "invalid type #{type}")
         end
       end
 
