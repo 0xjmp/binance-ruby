@@ -18,13 +18,20 @@ Or install it yourself as:
 
 ## Setup
 
-### Environment Variables
+### API Keys
 
 At minimum, you must configure the following environment variables:
 
 ```bash
 BINANCE_API_KEY
 BINANCE_SECRET_KEY
+```
+
+or as instance variables:
+
+```ruby
+Binance::Api::Configuration.api_key = nil 
+Binance::Api::Configuration.secret_key = nil
 ```
 
 Additionally, Binance allows granular API key access based on the action being taken. For example, it is possible to use one API key for _only_ trade actions, while using another for withdrawal actions. You can configure this using any of the following keys:
@@ -35,7 +42,15 @@ BINANCE_TRADING_API_KEY
 BINANCE_WITHDRAWALS_API_KEY
 ```
 
-If any one of these keys are not defined, `binance-ruby` will fallback to `BINANCE_API_KEY`.
+or as instance variables:
+
+```ruby
+Binance::Api::Configuration.read_info_api_key = nil
+Binance::Api::Configuration.trading_api_key = nil 
+Binance::Api::Configuration.withdrawals_api_key = nil 
+```
+
+If any one of these keys are not defined, `binance-ruby` will fallback to `BINANCE_API_KEY`/`Binance::Api::Configuration.api_key`.
 
 ## Usage
 
