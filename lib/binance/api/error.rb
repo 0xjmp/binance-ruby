@@ -16,9 +16,9 @@ module Binance
       end
 
       def inspect
-        message = "Binance::Api::Error"
-        message += " (#{code})" unless code.nil?
-        message += ": #{msg}" unless msg.nil?
+        message = ""
+        message += "(#{code}) " unless code.nil?
+        message += "#{msg}" unless msg.nil?
       end
 
       def message
