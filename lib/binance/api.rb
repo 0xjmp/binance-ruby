@@ -11,7 +11,9 @@ module Binance
 
       def compressed_aggregate_trades!(end_time: nil, from_id: nil, limit: 500, start_time: nil, symbol: nil) 
         raise Error.new(message: "symbol is required") unless symbol
-        params = { endTime: end_time, fromId: from_id, limit: limit, startTime: start_time, symbol: symbol }
+        params = {
+          endTime: end_time, fromId: from_id, limit: limit, startTime: start_time, symbol: symbol
+        }.delete_if { |key, value| value.nil? }
         Request.send!(api_key_type: :read_info, path: '/api/v1/aggTrades', params: params)
       end
       

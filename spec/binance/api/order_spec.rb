@@ -70,7 +70,7 @@ RSpec.describe Binance::Api::Order do
 
   describe '#all_open!' do
     let(:params) { { recvWindow: recv_window, symbol: symbol, timestamp: timestamp } }
-    let(:query_string) { params.map { |key, value| "#{key}=#{value}" }.join('&') }
+    let(:query_string) { params.delete_if { |k, v| v.nil? }.map { |key, value| "#{key}=#{value}" }.join('&') }
     let(:recv_window) { }
     let(:signature) do
       Binance::Api::Configuration.signed_request_signature(payload: query_string)
