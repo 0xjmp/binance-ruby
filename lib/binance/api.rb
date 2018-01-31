@@ -31,6 +31,12 @@ module Binance
         Request.send!(api_key_type: :read_info, path: '/api/v1/historicalTrades', params: params, security_type: :market_data)
       end
 
+      def info!(recv_window: nil)
+        timestamp = Configuration.timestamp
+        params = { recvWindow: recv_window, timestamp: timestamp }.delete_if { |key, value| value.nil? }
+        Request.send!(api_key_type: :read_info, path: '/api/v3/account', params: params, security_type: :user_data)
+      end
+
       def ping!
         Request.send!(path: '/api/v1/ping')
       end

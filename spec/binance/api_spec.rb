@@ -207,6 +207,44 @@ RSpec.describe Binance::Api do
     end
   end
 
+  describe '#info!' do
+    let(:params) { { recvWindow: recv_window, timestamp: timestamp } }
+    let(:query_string) { params.delete_if { |key, value| value.nil? }.map { |key, value| "#{key}=#{value}" }.join('&') }
+    let(:recv_window) { nil }
+    let(:signature) do
+      Binance::Api::Configuration.signed_request_signature(payload: query_string)
+    end
+    let(:timestamp) { Binance::Api::Configuration.timestamp }
+
+    subject { Binance::Api.info!(recv_window: recv_window) }
+
+    context 'when api fails' do
+      let!(:request_stub) do
+        stub_request(:get, 'https://api.binance.com/api/v3/account')
+          .with(query: query_string + "&signature=#{signature}")
+          .to_return(status: 400, body: { msg: 'error', code: '400' }.to_json)
+      end
+
+      it { is_expected_block.to raise_error Binance::Api::Error }
+
+      include_examples 'a valid http request'
+    end
+
+    context 'when api succeeds' do
+      let!(:request_stub) do
+        stub_request(:get, 'https://api.binance.com/api/v3/account')
+          .with(query: query_string + "&signature=#{signature}")
+          .to_return(status: 200, body: json_fixture('account'))
+      end
+
+      it { is_expected.to include(:makerCommission, :takerCommission, :buyerCommission,
+                                  :sellerCommission, :canTrade, :canWithdraw, :canDeposit,
+                                  :updateTime, :balances) }
+
+      include_examples 'a valid http request'
+    end
+  end
+
   describe '#ping!' do
     subject { Binance::Api.ping! }
 
