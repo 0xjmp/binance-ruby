@@ -2,21 +2,21 @@ module Binance
   module Api
     class << self
       # Valid limits:[5, 10, 20, 50, 100, 500, 1000]
-      def candlesticks!(end_time: nil, interval: nil, limit: 500, start_time: nil, symbol: nil) 
+      def candlesticks!(end_time: nil, interval: nil, limit: 500, start_time: nil, symbol: nil)
         raise Error.new(message: 'interval is required') unless interval
         raise Error.new(message: 'symbol is required') unless symbol
         params = { endTime: end_time, interval: interval, limit: limit, startTime: start_time, symbol: symbol }
         Request.send!(api_key_type: :read_info, path: '/api/v1/klines', params: params)
       end
 
-      def compressed_aggregate_trades!(end_time: nil, from_id: nil, limit: 500, start_time: nil, symbol: nil) 
+      def compressed_aggregate_trades!(end_time: nil, from_id: nil, limit: 500, start_time: nil, symbol: nil)
         raise Error.new(message: "symbol is required") unless symbol
         params = {
           endTime: end_time, fromId: from_id, limit: limit, startTime: start_time, symbol: symbol
         }.delete_if { |key, value| value.nil? }
         Request.send!(api_key_type: :read_info, path: '/api/v1/aggTrades', params: params)
       end
-      
+
       def depth!(symbol: nil, limit: 100)
         raise Error.new(message: "symbol is required") unless symbol
         params = { limit: limit, symbol: symbol }
@@ -47,8 +47,9 @@ module Binance
         ticker_type = type&.to_sym
         error_message = "type must be one of: #{ticker_types.join(', ')}. #{type} was provided."
         raise Error.new(message: error_message) unless ticker_types.include? ticker_type
+        path = ticker_path(type: ticker_type)
         params = symbol ? { symbol: symbol } : {}
-        Request.send!(api_key_type: :read_info, path: ticker_path(type: type), params: params)
+        Request.send!(api_key_type: :read_info, path: path, params: params)
       end
 
       def time!
