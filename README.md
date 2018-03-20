@@ -1,4 +1,4 @@
-# Binance::Api [![Gem Version](https://badge.fury.io/rb/binance-ruby.svg)](https://badge.fury.io/rb/binance-ruby) [![Circle CI](https://circleci.com/gh/Jakenberg/binance-ruby.svg?style=shield)](https://circleci.com/gh/Jakenberg/binance-ruby) [![codecov](https://codecov.io/gh/Jakenberg/binance-ruby/branch/master/graph/badge.svg)](https://codecov.io/gh/Jakenberg/binance-ruby)
+# Binance::Api [![Gem Version](https://badge.fury.io/rb/binance-ruby.svg)](https://badge.fury.io/rb/binance-ruby) [![Circle CI](https://circleci.com/gh/Jakenberg/binance-ruby.svg?style=shield)](https://circleci.com/gh/Jakenberg/binance-ruby) [![codecov](https://codecov.io/gh/Jakenberg/binance-ruby/branch/master/graph/badge.svg)](https://codecov.io/gh/Jakenberg/binance-ruby) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FJakenberg%2Fbinance-ruby.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FJakenberg%2Fbinance-ruby?ref=badge_shield)
 
 ## Installation
 
@@ -130,3 +130,6 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/jakenb
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FJakenberg%2Fbinance-ruby.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FJakenberg%2Fbinance-ruby?ref=badge_large)
