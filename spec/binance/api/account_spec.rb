@@ -11,7 +11,7 @@ RSpec.describe Binance::Api::Account do
     end
     let(:timestamp) { Binance::Api::Configuration.timestamp }
 
-    subject { Binance::Api::Account.info!(recv_window: recv_window) }
+    subject { Binance::Api::Account.info!(recvWindow: recv_window) }
 
     context 'when api responds with error' do
       let!(:request_stub) do
@@ -58,7 +58,7 @@ RSpec.describe Binance::Api::Account do
     let(:symbol) { }
     let(:timestamp) { Binance::Api::Configuration.timestamp }
 
-    subject { Binance::Api::Account.trades!(from_id: from_id, limit: limit, recv_window: recv_window, symbol: symbol) }
+    subject { Binance::Api::Account.trades!(fromId: from_id, limit: limit, recvWindow: recv_window, symbol: symbol) }
 
     context 'when limit is higher than max' do
       let(:limit) { 501 }

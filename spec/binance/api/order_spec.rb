@@ -14,7 +14,7 @@ RSpec.describe Binance::Api::Order do
     let(:timestamp) { Binance::Api::Configuration.timestamp }
 
     subject do
-      Binance::Api::Order.all!(limit: limit, order_id: order_id, recv_window: recv_window, symbol: symbol)
+      Binance::Api::Order.all!(limit: limit, orderId: order_id, recvWindow: recv_window, symbol: symbol)
     end
 
     context 'when limit is higher than max' do
@@ -78,7 +78,7 @@ RSpec.describe Binance::Api::Order do
     let(:symbol) { }
     let(:timestamp) { Binance::Api::Configuration.timestamp }
 
-    subject { Binance::Api::Order.all_open!(recv_window: recv_window, symbol: symbol) }
+    subject { Binance::Api::Order.all_open!(recvWindow: recv_window, symbol: symbol) }
 
     context 'when api responds with error' do
       let!(:request_stub) do
@@ -131,9 +131,9 @@ RSpec.describe Binance::Api::Order do
     let(:timestamp) { Binance::Api::Configuration.timestamp }
 
     subject { Binance::Api::Order.cancel!(
-      order_id: order_id, original_client_order_id: original_client_order_id,
-      new_client_order_id: new_client_order_id,
-      recv_window: recv_window, symbol: symbol
+      orderId: order_id, originalClientOrderId: original_client_order_id,
+      newClientOrderId: new_client_order_id,
+      recvWindow: recv_window, symbol: symbol
     )}
 
     shared_examples 'a valid http request' do
@@ -221,10 +221,10 @@ RSpec.describe Binance::Api::Order do
     let(:type) { }
 
     subject do
-      Binance::Api::Order.create!(iceberg_quantity: iceberg_quantity, new_client_order_id: new_client_order_id,
-                              new_order_response_type: new_order_response_type, price: price,
-                              quantity: quantity, recv_window: recv_window, stop_price: stop_price,
-                              symbol: symbol, side: side, type: type, time_in_force: time_in_force,
+      Binance::Api::Order.create!(icebergQuantity: iceberg_quantity, newClientOrderId: new_client_order_id,
+                              newOrderResponseType: new_order_response_type, price: price,
+                              quantity: quantity, recvWindow: recv_window, stopPrice: stop_price,
+                              symbol: symbol, side: side, type: type, timeInForce: time_in_force,
                               test: test)
     end
 
@@ -461,7 +461,7 @@ RSpec.describe Binance::Api::Order do
     let(:symbol) { }
     let(:timestamp) { Binance::Api::Configuration.timestamp }
 
-    subject { Binance::Api::Order.status!(order_id: order_id, original_client_order_id: original_client_order_id, recv_window: recv_window, symbol: symbol) }
+    subject { Binance::Api::Order.status!(orderId: order_id, originalClientOrderId: original_client_order_id, recvWindow: recv_window, symbol: symbol) }
 
     shared_examples 'a valid http request' do
       let(:query_string) { params.map { |key, value| "#{key}=#{value}" }.join('&') }

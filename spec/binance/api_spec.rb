@@ -19,9 +19,11 @@ RSpec.describe Binance::Api do
     let(:start_time) { '' }
     let(:symbol) { 'BTCLTC' }
 
-    subject { Binance::Api.candlesticks!(end_time: end_time, interval: interval,
-                                        limit: limit, start_time: start_time,
-                                        symbol: symbol,) }
+    subject do
+      Binance::Api.candlesticks!(endTime: end_time, interval: interval,
+                                 limit: limit, startTime: start_time,
+                                 symbol: symbol)
+    end
 
     context 'when interval is nil' do
       let(:interval) { nil }
@@ -67,8 +69,8 @@ RSpec.describe Binance::Api do
     let(:start_time) { '' }
     let(:symbol) { 'BTCLTC' }
 
-    subject { Binance::Api.compressed_aggregate_trades!(from_id: from_id, end_time: end_time, limit: limit,
-                                                       start_time: start_time, symbol: symbol) }
+    subject { Binance::Api.compressed_aggregate_trades!(fromId: from_id, endTime: end_time, limit: limit,
+                                                       startTime: start_time, symbol: symbol) }
 
     context 'when symbol is nil' do
       let(:symbol) { nil }
@@ -171,7 +173,7 @@ RSpec.describe Binance::Api do
     let(:limit) { 500 }
     let(:symbol) { 'BTCLTC' }
 
-    subject { Binance::Api.historical_trades!(from_id: from_id, symbol: symbol, limit: limit) }
+    subject { Binance::Api.historical_trades!(fromId: from_id, symbol: symbol, limit: limit) }
 
     context 'when symbol is nil' do
       let(:symbol) { nil }
@@ -216,7 +218,7 @@ RSpec.describe Binance::Api do
     end
     let(:timestamp) { Binance::Api::Configuration.timestamp }
 
-    subject { Binance::Api.info!(recv_window: recv_window) }
+    subject { Binance::Api.info!(recvWindow: recv_window) }
 
     context 'when api fails' do
       let!(:request_stub) do
@@ -363,13 +365,13 @@ RSpec.describe Binance::Api do
       end
     end
 
-    context 'when type is book_ticker' do
+    context 'when type is bookTicker' do
       let!(:request_stub) do
         url = "https://api.binance.com/api/v3/ticker/bookTicker" 
         url += "?symbol=#{symbol}" if symbol
         stub_request(:get, url).to_return(stub_response)
       end
-      let(:type) { :book_ticker }
+      let(:type) { :bookTicker }
 
       context 'when json response is singular' do
         let(:fixture) { json_fixture('ticker-book_ticker') }

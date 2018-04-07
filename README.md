@@ -55,12 +55,13 @@ If any one of these keys are not defined, `binance-ruby` will fallback to `BINAN
 ## Usage
 
 ### Examples
+
 ```ruby
 # Test that API is responding.
 Binance::Api.ping! # => {}
 
 # Create a new order.
-Binance::Api::Order.create!(price: '0.001', quantity: '100.0', side: 'BUY', symbol: 'XRPBTC', time_in_force: 'GTC', type: 'STOP_LIMIT')
+Binance::Api::Order.create!(price: '0.001', quantity: '100.0', side: 'BUY', symbol: 'XRPBTC', timeInForce: 'GTC', type: 'STOP_LIMIT')
 ```
 
 I would highly recommend reading the [official Binance documentation](https://github.com/binance-exchange/binance-official-api-docs) before using this gem. Anything missed here is surely well explained there.
@@ -125,7 +126,8 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 Bug reports and pull requests are welcome on GitHub at https://github.com/jakenberg/binance-ruby.
 
 ### TODO
-- Convert milliseconds to ruby DateTime.
+
+- DateTime parameters (in addition to milliseconds).
 
 ## License
 

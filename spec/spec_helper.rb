@@ -7,6 +7,7 @@ require "bundler/setup"
 require 'webmock/rspec'
 require 'codecov'
 require 'timecop'
+require 'pry'
 
 SimpleCov.formatter = SimpleCov::Formatter::Codecov unless ENV['CODECOV_TOKEN'].nil?
 

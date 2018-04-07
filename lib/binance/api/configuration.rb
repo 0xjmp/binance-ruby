@@ -39,7 +39,7 @@ module Binance
           var = "#{type.to_s.downcase}_api_key".sub(/^\_/, '')
           instance_variable_get('@' + var)
         end
-              end
+      end
     end
   end
 end
