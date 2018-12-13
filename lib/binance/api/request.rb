@@ -11,7 +11,7 @@ module Binance
           all_headers = default_headers(api_key_type: api_key_type, security_type: security_type)
           params.delete_if { |k, v| v.nil? }
           params.merge!(signature: signed_request_signature(params: params)) \
-            if [:trade, :user_data].include?(security_type)
+            if [:trade, :user_data, :withdraw].include?(security_type)
           # send() is insecure so don't use it.
           case method
           when :get
