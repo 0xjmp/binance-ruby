@@ -44,7 +44,7 @@ module Binance
         end
 
         def security_types
-          [:none, :trade, :user_data, :user_stream, :market_data].freeze
+          [:none, :trade, :user_data, :user_stream, :market_data, :withdraw].freeze
         end
 
         def signed_request_signature(params:)
