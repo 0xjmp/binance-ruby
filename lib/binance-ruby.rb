@@ -10,3 +10,4 @@ require 'binance/api/error'
 require 'binance/api/order'
 require 'binance/api/request'
 require "binance/api/version"
+require 'binance/api/wapi'

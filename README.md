@@ -30,7 +30,7 @@ BINANCE_SECRET_KEY
 or as instance variables:
 
 ```ruby
-Binance::Api::Configuration.api_key = nil 
+Binance::Api::Configuration.api_key = nil
 Binance::Api::Configuration.secret_key = nil
 ```
 
@@ -46,8 +46,8 @@ or as instance variables:
 
 ```ruby
 Binance::Api::Configuration.read_info_api_key = nil
-Binance::Api::Configuration.trading_api_key = nil 
-Binance::Api::Configuration.withdrawals_api_key = nil 
+Binance::Api::Configuration.trading_api_key = nil
+Binance::Api::Configuration.withdrawals_api_key = nil
 ```
 
 If any one of these keys are not defined, `binance-ruby` will fallback to `BINANCE_API_KEY`/`Binance::Api::Configuration.api_key`.
@@ -96,6 +96,11 @@ I would highly recommend reading the [official Binance documentation](https://gi
 - [`cancel!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#cancel-order-trade): Cancel an active order.
 - [`create!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#new-order--trade): Send in a new order. Use `test: true` for test orders.
 - [`status!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#query-order-user_data): Check an order's status.
+
+### Binance::Api::Wapi class methods
+
+- [`withdraw!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/wapi-api.md#withdraw): Submit a withdraw request.
+
 
 See the [rubydoc](http://www.rubydoc.info/gems/binance-ruby/0.1.2/Binance) for information about parameters for each method listed above.
 
