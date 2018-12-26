@@ -41,6 +41,8 @@ module Binance
           json = JSON.parse(response.body, symbolize_names: true)
           raise Error.new(json: json) if Error.is_error_response?(response: response)
           json
+        rescue JSON::ParserError
+          raise Error.new(message: 'Invalid JSON received from Binance')
         end
 
         def security_types
