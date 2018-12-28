@@ -27,7 +27,7 @@ module Binance
           end
           process!(response: response || '{}')
         rescue Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNRESET => error
-          raise Error.new(message: "Binance connection error: #{error.class.to_s} - #{error.to_s}")
+          raise Error.new(message: "Binance connection error: #{error.class.to_s} - #{error.to_s}"), cause: error
         end
 
         private
