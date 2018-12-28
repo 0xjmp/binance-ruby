@@ -26,6 +26,8 @@ module Binance
             raise Error.new(message: "invalid http method used: #{method}")
           end
           process!(response: response || '{}')
+        rescue Net::OpenTimeout, Net::ReadTimeout, Errno::ECONNRESET => error
+          raise Error.new(message: "Binance connection error: #{error.class.to_s} - #{error.to_s}")
         end
 
         private
