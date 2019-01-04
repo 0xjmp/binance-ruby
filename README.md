@@ -80,6 +80,7 @@ I would highly recommend reading the [official Binance documentation](https://gi
 
 ### Binance::Api::Account class methods
 
+- [`fees!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/wapi-api.md#asset-detail-user_data): Get withdrawal information (status, minimum amount and fees) for all symbols.
 - [`info!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#account-information-user_data): Get current account information.
 - [`trades!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#account-trade-list-user_data): Get trades for a specific account and symbol.
 
