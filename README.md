@@ -101,6 +101,12 @@ I would highly recommend reading the [official Binance documentation](https://gi
 
 - [`withdraw!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/wapi-api.md#withdraw): Submit a withdraw request.
 
+### Binance::Api::Wapi::Subaccount class methods
+
+- [`list!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/wapi-api.md#query-sub-account-assetsfor-master-account): Sub-Account list
+- [`history!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/wapi-api.md#query-sub-account-assetsfor-master-account): Sub-Account transfer history
+- [`asset!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/wapi-api.md#query-sub-account-assetsfor-master-account): Sub-Account asset list
+- [`transfer!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/wapi-api.md#sub-account-transferfor-master-account): Sub-Account transfer
 
 See the [rubydoc](http://www.rubydoc.info/gems/binance-ruby/0.1.2/Binance) for information about parameters for each method listed above.
 
