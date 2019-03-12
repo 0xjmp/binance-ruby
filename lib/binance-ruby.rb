@@ -11,3 +11,4 @@ require 'binance/api/order'
 require 'binance/api/request'
 require "binance/api/version"
 require 'binance/api/wapi'
+require 'binance/api/wapi/subaccount'

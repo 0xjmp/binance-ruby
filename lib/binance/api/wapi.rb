@@ -9,21 +9,12 @@ module Binance
             addressTag: addressTag, amount: amount, name: name,
             recvWindow: recvWindow, timestamp: timestamp
           }.delete_if { |key, value| value.nil? }
-          ensure_required_withdraw_keys!(params: params)
+
+          ensure_required_keys!(params: params, required_keys: [:asset, :address, :amount, :timestamp])
+
           path = "/wapi/v3/withdraw.html"
           Request.send!(api_key_type: :trading, method: :post, path: path,
                         params: params, security_type: :withdraw)
-        end
-
-        private
-
-        def ensure_required_withdraw_keys!(params:)
-          missing_keys = required_withdraw_keys.select { |key| params[key].nil? }
-          raise Error.new(message: "required keys are missing: #{missing_keys.join(', ')}") unless missing_keys.empty?
-        end
-
-        def required_withdraw_keys
-          [:asset, :address, :amount, :timestamp].freeze
         end
       end
     end
