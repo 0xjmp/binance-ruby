@@ -2,6 +2,14 @@ module Binance
   module Api
     class Account
       class << self
+        def fees!(recvWindow: 5000)
+          timestamp = Configuration.timestamp
+          params = { recvWindow: recvWindow, timestamp: timestamp }
+          Request.send!(api_key_type: :read_info, path: "/wapi/v3/assetDetail.html",
+                        params: params.delete_if { |key, value| value.nil? },
+            security_type: :user_data)
+        end
+
         def info!(recvWindow: 5000)
           timestamp = Configuration.timestamp
           params = { recvWindow: recvWindow, timestamp: timestamp }

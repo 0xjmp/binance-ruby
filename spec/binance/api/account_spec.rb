@@ -1,6 +1,49 @@
 require 'spec_helper'
 
 RSpec.describe Binance::Api::Account do
+  describe '#fees!' do
+    let(:params) { { recv_window: recv_window, timestamp: timestamp } }
+    let(:query_string) { params.delete_if { |key, value| value.nil? }.map { |key, value| "#{key}=#{value}" }.join('&') }
+    let(:recv_window) { }
+    let(:signature) do
+      signature_string = Binance::Api::Configuration.signed_request_signature(payload: query_string)
+      CGI.escape(signature_string)
+    end
+    let(:timestamp) { Binance::Api::Configuration.timestamp }
+
+    subject { Binance::Api::Account.fees!(recvWindow: recv_window) }
+
+    context 'when api responds with error' do
+      let!(:request_stub) do
+        stub_request(:get, "https://api.binance.com/wapi/v3/assetDetail.html")
+          .with(query: query_string + "&signature=#{signature}")
+          .to_return(status: 400, body: { msg: 'error', code: '400' }.to_json)
+      end
+
+      it { is_expected_block.to raise_error Binance::Api::Error }
+
+      it 'should send api request' do
+        subject rescue Binance::Api::Error
+        expect(request_stub).to have_been_requested
+      end
+    end
+
+    context 'when api succeeds' do
+      let!(:request_stub) do
+        stub_request(:get, "https://api.binance.com/wapi/v3/assetDetail.html")
+          .with(query: query_string + "&signature=#{signature}")
+          .to_return(status: 200, body: json_fixture('assetDetail'))
+      end
+
+      it { is_expected.to include(:success, :assetDetail) }
+
+      it 'should send api request' do
+        subject rescue Binance::Api::Error
+        expect(request_stub).to have_been_requested
+      end
+    end
+  end
+
   describe '#info!' do
     let(:params) { { recv_window: recv_window, timestamp: timestamp } }
     let(:query_string) { params.delete_if { |key, value| value.nil? }.map { |key, value| "#{key}=#{value}" }.join('&') }
@@ -98,7 +141,7 @@ RSpec.describe Binance::Api::Account do
         end
 
         it 'has trade keys' do
-          expect(subject.first).to include(:id, :orderId, :price, :qty, :commission, :commissionAsset, :time, 
+          expect(subject.first).to include(:id, :orderId, :price, :qty, :commission, :commissionAsset, :time,
                                            :isBuyer, :isMaker, :isBestMatch)
         end
 
