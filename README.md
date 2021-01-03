@@ -30,7 +30,7 @@ BINANCE_SECRET_KEY
 or as instance variables:
 
 ```ruby
-Binance::Api::Configuration.api_key = nil 
+Binance::Api::Configuration.api_key = nil
 Binance::Api::Configuration.secret_key = nil
 ```
 
@@ -46,8 +46,8 @@ or as instance variables:
 
 ```ruby
 Binance::Api::Configuration.read_info_api_key = nil
-Binance::Api::Configuration.trading_api_key = nil 
-Binance::Api::Configuration.withdrawals_api_key = nil 
+Binance::Api::Configuration.trading_api_key = nil
+Binance::Api::Configuration.withdrawals_api_key = nil
 ```
 
 If any one of these keys are not defined, `binance-ruby` will fallback to `BINANCE_API_KEY`/`Binance::Api::Configuration.api_key`.
@@ -61,7 +61,14 @@ If any one of these keys are not defined, `binance-ruby` will fallback to `BINAN
 Binance::Api.ping! # => {}
 
 # Create a new order.
-Binance::Api::Order.create!(price: '0.001', quantity: '100.0', side: 'BUY', symbol: 'XRPBTC', timeInForce: 'GTC', type: 'STOP_LIMIT')
+Binance::Api::Order.create!(
+  price: '0.001',
+  quantity: '100.0',
+  side: 'BUY',
+  symbol: 'XRPBTC',
+  timeInForce: 'GTC',
+  type: 'STOP_LIMIT'
+)
 ```
 
 I would highly recommend reading the [official Binance documentation](https://github.com/binance-exchange/binance-official-api-docs) before using this gem. Anything missed here is surely well explained there.
@@ -98,6 +105,10 @@ I would highly recommend reading the [official Binance documentation](https://gi
 - [`create!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#new-order--trade): Send in a new order. Use `test: true` for test orders.
 - [`status!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#query-order-user_data): Check an order's status.
 
+### Binance::Api::Margin::Order class methods
+
+- [`create!`](https://binance-docs.github.io/apidocs/spot/en/#margin-account-new-order-trade): Create a new margin order.
+
 See the [rubydoc](http://www.rubydoc.info/gems/binance-ruby/0.1.2/Binance) for information about parameters for each method listed above.
 
 For more information, please refer to the [official Rest API documentation](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md) written by the Binance team.
@@ -132,14 +143,14 @@ The operational system clock is ahead/behind regarding the Binance's timestamp c
 
 Use the command: `sudo ntpdate time.nist.gov`.
 
-If `ntpdate` is not installed: `sudo apt install ntpdate`. 
+If `ntpdate` is not installed: `sudo apt install ntpdate`.
 
 #### Resolution: Windows
 
 Use the path: Right-click on tray clock > Adjust date/time > Additional date, time & regional settings > Date and Time > Internet time > Change settings...
 
- - Option "Syncronize with an Internet time server" should be enabled;
- - "Server" should be "time.nist.org".
+- Option "Syncronize with an Internet time server" should be enabled;
+- "Server" should be "time.nist.org".
 
 ## Contributing
 
@@ -152,6 +163,5 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/jakenb
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
-
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FJakenberg%2Fbinance-ruby.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FJakenberg%2Fbinance-ruby?ref=badge_large)

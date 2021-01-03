@@ -16,14 +16,14 @@ module Binance
         def all_open!(recvWindow: 5000, symbol: nil)
           timestamp = Configuration.timestamp
           params = { recvWindow: recvWindow, symbol: symbol, timestamp: timestamp }
-          Request.send!(api_key_type: :read_info, path: '/api/v3/openOrders',
+          Request.send!(api_key_type: :read_info, path: "/api/v3/openOrders",
                         params: params, security_type: :user_data)
         end
 
         def cancel!(orderId: nil, originalClientOrderId: nil, newClientOrderId: nil, recvWindow: nil, symbol: nil)
           raise Error.new(message: "symbol is required") if symbol.nil?
           raise Error.new(message: "either orderid or originalclientorderid " \
-            "is required") if orderId.nil? && originalClientOrderId.nil?
+                          "is required") if orderId.nil? && originalClientOrderId.nil?
           timestamp = Configuration.timestamp
           params = { orderId: orderId, origClientOrderId: originalClientOrderId,
                      newClientOrderId: newClientOrderId, recvWindow: recvWindow,
@@ -36,14 +36,14 @@ module Binance
                     price: nil, quantity: nil, recvWindow: nil, stopPrice: nil, symbol: nil,
                     side: nil, type: nil, timeInForce: nil, test: false)
           timestamp = Configuration.timestamp
-          params = { 
+          params = {
             icebergQty: icebergQuantity, newClientOrderId: newClientOrderId,
             newOrderRespType: newOrderResponseType, price: price, quantity: quantity,
             recvWindow: recvWindow, stopPrice: stopPrice, symbol: symbol, side: side,
-            type: type, timeInForce: timeInForce, timestamp: timestamp
+            type: type, timeInForce: timeInForce, timestamp: timestamp,
           }.delete_if { |key, value| value.nil? }
           ensure_required_create_keys!(params: params)
-          path = "/api/v3/order#{'/test' if test}"
+          path = "/api/v3/order#{"/test" if test}"
           Request.send!(api_key_type: :trading, method: :post, path: path,
                         params: params, security_type: :trade)
         end
@@ -51,11 +51,11 @@ module Binance
         def status!(orderId: nil, originalClientOrderId: nil, recvWindow: nil, symbol: nil)
           raise Error.new(message: "symbol is required") if symbol.nil?
           raise Error.new(message: "either orderid or originalclientorderid " \
-            "is required") if orderId.nil? && originalClientOrderId.nil?
+                          "is required") if orderId.nil? && originalClientOrderId.nil?
           timestamp = Configuration.timestamp
           params = {
             orderId: orderId, origClientOrderId: originalClientOrderId, recvWindow: recvWindow,
-            symbol: symbol, timestamp: timestamp
+            symbol: symbol, timestamp: timestamp,
           }.delete_if { |key, value| value.nil? }
           Request.send!(api_key_type: :trading, path: "/api/v3/order",
                         params: params, security_type: :user_data)
@@ -81,7 +81,7 @@ module Binance
         def ensure_required_create_keys!(params:)
           keys = required_create_keys.dup.concat(additional_required_create_keys(type: params[:type]))
           missing_keys = keys.select { |key| params[key].nil? }
-          raise Error.new(message: "required keys are missing: #{missing_keys.join(', ')}") unless missing_keys.empty?
+          raise Error.new(message: "required keys are missing: #{missing_keys.join(", ")}") unless missing_keys.empty?
         end
 
         def required_create_keys
