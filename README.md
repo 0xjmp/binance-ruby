@@ -151,6 +151,10 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Troubleshooting
 
+### (-2015) Invalid API-key, IP, or permissions for action.
+
+Are your API keys from a binance.us account? [How-to configure](https://github.com/jakenberg/binance-ruby#accounts-in-the-usa).
+
 ### "(-1021) Timestamp for this request was 1000ms ahead of the server's time."
 
 The operational system clock is ahead/behind regarding the Binance's timestamp clock.
