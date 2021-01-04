@@ -6,6 +6,7 @@
 - 100% test coverage
 - Exception handling
 - Automatic timestamp and signature generation
+- Support for United States accounts
 
 ## Installation
 
