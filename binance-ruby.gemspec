@@ -37,7 +37,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'pry', '~> 0.11.3'
   spec.add_development_dependency 'simplecov', '~> 0.20.0'
 
-  spec.add_dependency 'activesupport', ['>=5.1.0', '<7.0.0']
+  spec.add_dependency 'activesupport', '>= 5.1.0'
   spec.add_dependency 'awrence', '~> 1.0'
   spec.add_dependency 'httparty', '~> 0.15'
 end
