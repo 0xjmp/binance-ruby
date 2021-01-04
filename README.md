@@ -1,5 +1,12 @@
 # Binance::Api [![Gem Version](https://badge.fury.io/rb/binance-ruby.svg)](https://badge.fury.io/rb/binance-ruby) [![Circle CI](https://circleci.com/gh/Jakenberg/binance-ruby.svg?style=shield)](https://circleci.com/gh/Jakenberg/binance-ruby) [![codecov](https://codecov.io/gh/Jakenberg/binance-ruby/branch/master/graph/badge.svg)](https://codecov.io/gh/Jakenberg/binance-ruby) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FJakenberg%2Fbinance-ruby.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FJakenberg%2Fbinance-ruby?ref=badge_shield)
 
+## Features
+
+- Spot & Margin Trading
+- 100% test coverage
+- Exception handling
+- Automatic timestamp and signature generation
+
 ## Installation
 
 Add this line to your application's Gemfile:
