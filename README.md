@@ -52,6 +52,14 @@ Binance::Api::Configuration.withdrawals_api_key = nil
 
 If any one of these keys are not defined, `binance-ruby` will fallback to `BINANCE_API_KEY`/`Binance::Api::Configuration.api_key`.
 
+### Accounts in the USA
+
+If your Binance account is based in the United States (www.binance.us), you will need to specify that in an environment variable:
+
+```ruby
+BINANCE_TLD = US
+```
+
 ## Usage
 
 ### Examples

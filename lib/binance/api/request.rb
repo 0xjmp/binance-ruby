@@ -2,11 +2,10 @@ module Binance
   module Api
     class Request
       include HTTParty
-
-      base_uri "https://api.binance.com"
-
       class << self
         def send!(api_key_type: :none, headers: {}, method: :get, path: "/", params: {}, security_type: :none)
+          self.base_uri "https://api.binance.#{Configuration.tld}"
+
           raise Error.new(message: "invalid security type #{security_type}") unless security_types.include?(security_type)
           all_headers = default_headers(api_key_type: api_key_type, security_type: security_type)
           params.delete_if { |k, v| v.nil? }
