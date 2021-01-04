@@ -16,8 +16,7 @@ module Binance
 
         def tld
           tld = ENV["BINANCE_TLD"]&.downcase&.to_sym || :com
-          error_message = "Invalid tld (top-level-domain): #{tld}. Use one of: #{allowed_tlds.join(", ")}."
-          raise Error.new(message: error_message) unless allowed_tlds.include?(tld)
+          validate_tld!(tld)
           tld
         end
 
@@ -34,6 +33,11 @@ module Binance
 
         def timestamp
           Time.now.utc.strftime("%s%3N")
+        end
+
+        def validate_tld!(tld)
+          error_message = "Invalid tld (top-level-domain): #{tld}. Use one of: #{allowed_tlds.join(", ")}."
+          raise Error.new(message: error_message) unless allowed_tlds.include?(tld&.to_sym)
         end
 
         private

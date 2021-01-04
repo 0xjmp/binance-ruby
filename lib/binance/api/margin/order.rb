@@ -18,7 +18,7 @@ module Binance
             ensure_required_create_keys!(params: params)
             path = "/sapi/v1/margin/order"
             Request.send!(api_key_type: :trading, method: :post, path: path,
-                          params: params, security_type: :trade)
+                          params: params, security_type: :trade, tld: Configuration.tld)
           end
 
           private
