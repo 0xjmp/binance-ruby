@@ -1,7 +1,7 @@
 module Binance
   module Api
     class Error < StandardError
-      attr_reader :code, :msg
+      attr_reader :code, :msg, :symbol
 
       class << self
         # https://github.com/binance-exchange/binance-official-api-docs/blob/master/errors.md
@@ -10,9 +10,10 @@ module Binance
         end
       end
 
-      def initialize(code: nil, json: {}, message: nil)
+      def initialize(code: nil, json: {}, message: nil, symbol: nil)
         @code = code || json[:code]
         @msg = message || json[:msg]
+        @symbol = message || json[:symbol]
       end
 
       def inspect
