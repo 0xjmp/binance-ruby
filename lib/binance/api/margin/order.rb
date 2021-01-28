@@ -3,6 +3,19 @@ module Binance
     module Margin
       class Order
         class << self
+          def cancel!(symbol: nil, isIsolated: false, orderId: nil, origClientOrderId: nil,
+                      newClientOrderId: nil, recvWindow: nil)
+            timestamp = Configuration.timestamp
+            params = {
+              symbol: symbol, isIsolated: isIsolated, orderId: orderId, origClientOrderId: origClientOrderId,
+              newClientOrderId: newClientOrderId, recvWindow: recvWindow, timestamp: timestamp,
+            }.delete_if { |_, value| value.nil? }
+            ensure_required_cancel_keys!(params: params)
+            path = "/sapi/v1/margin/order"
+            Request.send!(api_key_type: :trading, method: :delete, path: path,
+                          params: params, security_type: :margin, tld: Configuration.tld)
+          end
+
           def create!(symbol: nil, isIsolated: false, side: nil, type: nil, quantity: nil,
                       quoteOrderQty: nil, price: nil, stopPrice: nil, newClientOrderId: nil,
                       icebergQty: nil, newOrderRespType: nil, sideEffectType: nil, timeInForce: nil,
@@ -46,6 +59,16 @@ module Binance
 
           def required_create_keys
             [:symbol, :side, :type, :timestamp].freeze
+          end
+
+          def ensure_required_cancel_keys!(params:)
+            keys = required_cancel_keys.dup
+            missing_keys = keys.select { |key| params[key].nil? }
+            raise Error.new(message: "required keys are missing: #{missing_keys.join(", ")}") unless missing_keys.empty?
+          end
+
+          def required_cancel_keys
+            [:symbol, :timestamp].freeze
           end
         end
       end

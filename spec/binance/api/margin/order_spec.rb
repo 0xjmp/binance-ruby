@@ -1,6 +1,80 @@
 require "spec_helper"
 
 RSpec.describe Binance::Api::Margin::Order do
+  describe "#cancel!" do
+    let(:is_isolated) { }
+    let(:orig_client_order_id) { }
+    let(:new_client_order_id) { }
+    let(:recv_window) { }
+    let(:symbol) { }
+    let(:timestamp) { Binance::Api::Configuration.timestamp }
+
+    subject do
+      Binance::Api::Margin::Order.cancel!(
+        isIsolated: is_isolated, origClientOrderId: orig_client_order_id,
+        newClientOrderId: new_client_order_id,
+        recvWindow: recv_window,
+        symbol: symbol,
+      )
+    end
+
+    shared_examples "a valid http request" do
+      let(:params) {
+        {
+          symbol: symbol, isIsolated: is_isolated,
+          origClientOrderId: orig_client_order_id, newClientOrderId: new_client_order_id,
+          recvWindow: recv_window, timestamp: timestamp,
+        }.delete_if { |key, value| value.nil? }
+      }
+      let(:request_body) { params.map { |key, value| "#{key}=#{value}" }.join("&") }
+
+      context "when api responds with error" do
+        let!(:request_stub) do
+          stub_request(:delete, "https://api.binance.com/sapi/v1/margin/order")
+            .with(body: request_body)
+            .to_return(status: 400, body: { msg: "error", code: "400" }.to_json)
+        end
+
+        it { is_expected_block.to raise_error Binance::Api::Error }
+
+        it "should send api request" do
+          subject rescue Binance::Api::Error
+          expect(request_stub).to have_been_requested
+        end
+      end
+
+      context "when api succeeds" do
+        let!(:request_stub) do
+          stub_request(:delete, "https://api.binance.com/sapi/v1/margin/order")
+            .with(body: request_body)
+            .to_return(status: 200, body: json_fixture("margin-cancel"))
+        end
+
+        it {
+          is_expected.to include(:symbol, :isIsolated, :orderId, :origClientOrderId, :price, :origQty,
+                                 :executedQty, :cummulativeQuoteQty, :status, :timeInForce, :type, :side)
+        }
+
+        it "should send api request" do
+          subject
+          expect(request_stub).to have_been_requested
+        end
+      end
+    end
+
+    context "when symbol is nil" do
+      let(:symbol) { nil }
+
+      it { is_expected_block.to raise_error Binance::Api::Error }
+    end
+
+    context "when symbol set" do
+      let(:symbol) { "BTC" }
+
+      include_examples "a valid http request"
+    end
+  end
+
   describe "#create!" do
     let(:iceberg_quantity) { }
     let(:is_isolated) { }
