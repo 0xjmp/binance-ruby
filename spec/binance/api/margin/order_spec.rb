@@ -36,14 +36,11 @@ RSpec.describe Binance::Api::Margin::Order do
         }.delete_if { |key, value| value.nil? }
       }
       let(:request_body) { params.map { |key, value| "#{key}=#{value}" }.join("&") }
-      let(:signature) do
-        Binance::Api::Configuration.signed_request_signature(payload: request_body)
-      end
 
       context "when api responds with error" do
         let!(:request_stub) do
           stub_request(:post, "https://api.binance.com/sapi/v1/margin/order")
-            .with(body: request_body + "&signature=#{signature}")
+            .with(body: request_body)
             .to_return(status: 400, body: { msg: "error", code: "400" }.to_json)
         end
 
@@ -58,7 +55,7 @@ RSpec.describe Binance::Api::Margin::Order do
       context "when api succeeds" do
         let!(:request_stub) do
           stub_request(:post, "https://api.binance.com/sapi/v1/margin/order")
-            .with(body: request_body + "&signature=#{signature}")
+            .with(body: request_body)
             .to_return(status: 200, body: json_fixture("market-order-new"))
         end
 
