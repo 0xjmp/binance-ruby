@@ -37,7 +37,12 @@ module Binance
         end
 
         def process!(response:)
-          json = JSON.parse(response.body, symbolize_names: true)
+          json = begin
+              JSON.parse(response.body, symbolize_names: true)
+            rescue JSON::ParserError => error
+              # binance 500 errors are html format
+              raise Error.new(message: error)
+            end
           raise Error.new(json: json) if Error.is_error_response?(response: response)
           json
         end
