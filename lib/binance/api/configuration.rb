@@ -24,11 +24,11 @@ module Binance
           instance_variable_get("@secret_key") || ENV["BINANCE_SECRET_KEY"]
         end
 
-        def signed_request_signature(payload:)
+        def signed_request_signature(payload:, api_secret_key: nil)
           raise Error.new(message: "environment variable 'BINANCE_SECRET_KEY' is required " \
-                          "for signed requests.") unless secret_key
+                          "for signed requests.") unless api_secret_key || secret_key
           digest = OpenSSL::Digest::SHA256.new
-          OpenSSL::HMAC.hexdigest(digest, secret_key, payload)
+          OpenSSL::HMAC.hexdigest(digest, api_secret_key || secret_key, payload)
         end
 
         def timestamp

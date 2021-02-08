@@ -3,7 +3,7 @@ module Binance
     module Margin
       class Account
         class << self
-          def transfer!(asset: nil, amount: nil, type: nil, recvWindow: nil)
+          def transfer!(asset: nil, amount: nil, type: nil, recvWindow: nil, api_key: nil, api_secret_key: nil)
             timestamp = Configuration.timestamp
             params = {
               asset: asset, amount: amount, type: type, recvWindow: recvWindow, timestamp: timestamp,
@@ -11,7 +11,8 @@ module Binance
             ensure_required_create_keys!(params: params)
             path = "/sapi/v1/margin/transfer"
             Request.send!(api_key_type: :trading, method: :post, path: path,
-                          params: params, security_type: :margin, tld: Configuration.tld)
+                          params: params, security_type: :margin, tld: Configuration.tld,
+                          api_key: api_key, api_secret_key: api_secret_key)
           end
 
           private

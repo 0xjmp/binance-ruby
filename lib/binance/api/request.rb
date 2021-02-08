@@ -3,14 +3,15 @@ module Binance
     class Request
       include HTTParty
       class << self
-        def send!(api_key_type: :none, headers: {}, method: :get, path: "/", params: {}, security_type: :none, tld: :com)
+        def send!(api_key_type: :none, headers: {}, method: :get, path: "/", params: {}, security_type: :none, tld: :com, api_key: nil, api_secret_key: nil)
           Configuration.validate_tld!(tld)
           self.base_uri "https://api.binance.#{tld}"
 
           raise Error.new(message: "invalid security type #{security_type}") unless security_types.include?(security_type)
-          all_headers = default_headers(api_key_type: api_key_type, security_type: security_type)
+          all_headers = default_headers(api_key_type: api_key_type, security_type: security_type, api_key: api_key)
           params.delete_if { |k, v| v.nil? }
-          params.merge!(signature: signed_request_signature(params: params)) if [:trade, :user_data].include?(security_type)
+          signature = signed_request_signature(params: params, api_secret_key: api_secret_key)
+          params.merge!(signature: signature) if [:trade, :user_data].include?(security_type)
           # send() is insecure so don't use it.
           case method
           when :get
@@ -29,10 +30,10 @@ module Binance
 
         private
 
-        def default_headers(api_key_type:, security_type:)
+        def default_headers(api_key_type:, security_type:, api_key: nil)
           headers = {}
           headers["Content-Type"] = "application/json; charset=utf-8"
-          headers["X-MBX-APIKEY"] = Configuration.api_key(type: api_key_type) unless security_type == :none
+          headers["X-MBX-APIKEY"] = (api_key || Configuration.api_key(type: api_key_type)) unless security_type == :none
           headers
         end
 
@@ -51,9 +52,9 @@ module Binance
           [:none, :trade, :user_data, :user_stream, :market_data, :margin].freeze
         end
 
-        def signed_request_signature(params:)
+        def signed_request_signature(params:, api_secret_key: nil)
           payload = params.map { |key, value| "#{key}=#{value}" }.join("&")
-          Configuration.signed_request_signature(payload: payload)
+          Configuration.signed_request_signature(payload: payload, api_secret_key: api_secret_key)
         end
       end
     end
