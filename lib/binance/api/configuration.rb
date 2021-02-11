@@ -9,9 +9,8 @@ module Binance
           :trading_api_key, :withdrawals_api_key
 
         def api_key(type: nil)
-          raise Error.new(message: "invalid security_type type: #{type}.") unless type.nil? || api_key_types.include?(type)
-          instance_api_key(type: type) || ENV["BINANCE_#{type.to_s.humanize.upcase}_API_KEY"] ||
-          instance_api_key || ENV["BINANCE_API_KEY"]
+          raise Error.new(message: "invalid api_key type: #{type}.") unless type.nil? || api_key_types.include?(type)
+          instance_api_key(type: type) || ENV["BINANCE_#{type.to_s.humanize.upcase}_API_KEY"] || ENV["BINANCE_API_KEY"]
         end
 
         def tld
