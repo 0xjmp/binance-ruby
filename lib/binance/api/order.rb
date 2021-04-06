@@ -37,12 +37,12 @@ module Binance
         end
 
         def create!(icebergQuantity: nil, newClientOrderId: nil, newOrderResponseType: nil,
-                    price: nil, quantity: nil, recvWindow: nil, stopPrice: nil, symbol: nil,
+                    price: nil, quantity: nil, quoteOrderQty: nil, recvWindow: nil, stopPrice: nil, symbol: nil,
                     side: nil, type: nil, timeInForce: nil, test: false, api_key: nil, api_secret_key: nil)
           timestamp = Configuration.timestamp
           params = {
             icebergQty: icebergQuantity, newClientOrderId: newClientOrderId,
-            newOrderRespType: newOrderResponseType, price: price, quantity: quantity,
+            newOrderRespType: newOrderResponseType, price: price, quantity: quantity, quoteOrderQty: quoteOrderQty,
             recvWindow: recvWindow, stopPrice: stopPrice, symbol: symbol, side: side,
             type: type, timeInForce: timeInForce, timestamp: timestamp,
           }.delete_if { |key, value| value.nil? }
@@ -92,7 +92,7 @@ module Binance
         end
 
         def required_create_keys
-          [:symbol, :side, :type, :quantity, :timestamp].freeze
+          [:symbol, :side, :type, :timestamp].freeze
         end
       end
     end

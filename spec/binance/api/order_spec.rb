@@ -212,6 +212,7 @@ RSpec.describe Binance::Api::Order do
     let(:new_order_response_type) { }
     let(:price) { }
     let(:quantity) { }
+    let(:quote_order_qty) { }
     let(:recv_window) { }
     let(:side) { }
     let(:stop_price) { }
@@ -223,7 +224,7 @@ RSpec.describe Binance::Api::Order do
     subject do
       Binance::Api::Order.create!(icebergQuantity: iceberg_quantity, newClientOrderId: new_client_order_id,
                               newOrderResponseType: new_order_response_type, price: price,
-                              quantity: quantity, recvWindow: recv_window, stopPrice: stop_price,
+                              quantity: quantity, quoteOrderQty: quote_order_qty, recvWindow: recv_window, stopPrice: stop_price,
                               symbol: symbol, side: side, type: type, timeInForce: time_in_force,
                               test: test)
     end
@@ -232,7 +233,7 @@ RSpec.describe Binance::Api::Order do
       let(:params) { {
         icebergQty: iceberg_quantity, newClientOrderId: new_client_order_id,
         newOrderRespType: new_order_response_type, price: price,
-        quantity: quantity, recvWindow: recv_window, 
+        quantity: quantity, quoteOrderQty: quote_order_qty, recvWindow: recv_window,
         stopPrice: stop_price, symbol: symbol, side: side, type: type,
         timeInForce: time_in_force, timestamp: timestamp
       }.delete_if { |key, value| value.nil? } }
@@ -336,6 +337,12 @@ RSpec.describe Binance::Api::Order do
 
         context 'and type is market' do
           let(:type) { :market }
+
+          context 'and quoteOrderQty is not nil' do
+            let(:quoteOrderQty) { 100.0 }
+
+            include_examples 'a valid http request'
+          end
 
           include_examples 'a valid http request'
         end
