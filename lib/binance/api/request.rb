@@ -44,7 +44,7 @@ module Binance
               # binance 500 errors are html format
               raise Error.new(message: error)
             end
-          raise Error.new(json: json) if Error.is_error_response?(response: response)
+          raise Error.localized(json[:code]).new(json: json) if Error.is_error_response?(response: response)
           json
         end
 
