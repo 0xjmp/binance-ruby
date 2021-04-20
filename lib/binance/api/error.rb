@@ -11,7 +11,7 @@ module Binance
 
         # https://github.com/binance/binance-spot-api-docs/blob/master/errors.md
         def localized(message)
-          code = message.match(/\d+/).to_s.to_i
+          code = message.to_s.match(/\d+/).to_s.to_i
           case code
           when 1000 then Unknown
           when 1001 then Disconnected

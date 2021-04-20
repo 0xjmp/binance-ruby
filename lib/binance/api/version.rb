@@ -1,5 +1,5 @@
 module Binance
   module Api
-    VERSION = "0.8"
+    VERSION = "1.0"
   end
 end
