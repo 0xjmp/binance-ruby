@@ -3,7 +3,7 @@ module Binance
     class Request
       include HTTParty
       class << self
-        def send!(api_key_type: :none, headers: {}, method: :get, path: "/", params: {}, security_type: :none, tld: :com, api_key: nil, api_secret_key: nil)
+        def send!(api_key_type: :none, headers: {}, method: :get, path: "/", params: {}, security_type: :none, tld: Configuration.tld, api_key: nil, api_secret_key: nil)
           Configuration.validate_tld!(tld)
           self.base_uri "https://api.binance.#{tld}"
 
