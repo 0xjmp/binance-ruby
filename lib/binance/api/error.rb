@@ -19,6 +19,7 @@ module Binance
           when 1003 then TooManyRequests
           when 1006 then UnexpectedResponse
           when 1007 then Timeout
+          when 1013 then InvalidQuantity
           when 1014 then UnknownOrderComposition
           when 1015 then TooManyOrders
           when 1016 then ServiceShuttingDown
@@ -84,6 +85,7 @@ module Binance
       class TooManyRequests < Error; end
       class UnexpectedResponse < Error; end
       class Timeout < Error; end
+      class InvalidQuantity < Error; end
       class UnknownOrderComposition < Error; end
       class TooManyOrders < Error; end
       class ServiceShuttingDown < Error; end

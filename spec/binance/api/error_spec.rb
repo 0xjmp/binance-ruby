@@ -51,6 +51,7 @@ RSpec.describe Binance::Api::Error do
     include_examples "a valid error", "(-1003) some error message", "TooManyRequests"
     include_examples "a valid error", "(-1006) some error message", "UnexpectedResponse"
     include_examples "a valid error", "(-1007) some error message", "Timeout"
+    include_examples "a valid error", "(-1013) some error message", "InvalidQuantity"
     include_examples "a valid error", "(-1014) some error message", "UnknownOrderComposition"
     include_examples "a valid error", "(-1015) some error message", "TooManyOrders"
     include_examples "a valid error", "(-1016) some error message", "ServiceShuttingDown"
