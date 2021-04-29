@@ -1,6 +1,7 @@
 require "active_support/core_ext/string"
 require "awrence"
 require "httparty"
+require "faye/websocket"
 
 require "binance/api"
 require "binance/api/account"
@@ -13,3 +14,4 @@ require "binance/api/margin/order"
 require "binance/api/order"
 require "binance/api/request"
 require "binance/api/version"
+require "binance/websocket"
