@@ -1,48 +1,67 @@
 module Binance
   class WebSocket < Faye::WebSocket::Client
-    def initialize(&on_open)
+    def initialize
       super "wss://stream.binance.com:9443/stream", nil, ping: 180
 
       @request_id_inc = 0
 
       on :open do |event|
         p [:open]
-        on_open&.call
       end
 
       on :message do |event|
-        p [:message, event.data]
-        p event
-        process(event.data)
+        process_data(event.data)
       end
 
       on :close do |event|
         p [:close, event.code, event.reason]
-        # FIXME: ws = nil
       end
     end
 
     # stream name: <symbol>@kline_<interval>
-    def candlesticks(symbols, interval, &on_receive)
+    #
+    # {
+    #   "e": "kline",     // Event type
+    #   "E": 123456789,   // Event time
+    #   "s": "BNBBTC",    // Symbol
+    #   "k": {
+    #     "t": 123400000, // Kline start time
+    #     "T": 123460000, // Kline close time
+    #     "s": "BNBBTC",  // Symbol
+    #     "i": "1m",      // Interval
+    #     "f": 100,       // First trade ID
+    #     "L": 200,       // Last trade ID
+    #     "o": "0.0010",  // Open price
+    #     "c": "0.0020",  // Close price
+    #     "h": "0.0025",  // High price
+    #     "l": "0.0015",  // Low price
+    #     "v": "1000",    // Base asset volume
+    #     "n": 100,       // Number of trades
+    #     "x": false,     // Is this kline closed?
+    #     "q": "1.0000",  // Quote asset volume
+    #     "V": "500",     // Taker buy base asset volume
+    #     "Q": "0.500",   // Taker buy quote asset volume
+    #     "B": "123456"   // Ignore
+    #   }
+    # }
+    def candlesticks!(symbols, interval, &on_receive)
       symbols_fmt = symbols.is_a?(String) ? [symbols] : symbols
-      @candlestick_handler = on_receive
+      @candlesticks_handler = on_receive
       subscribe(symbols_fmt.map { |s| "#{s.downcase}@kline_#{interval}" })
     end
 
     private
 
-    def process(data)
-      json = JSON.parse(event.data, symbolize_names: true)
+    def process_data(data)
+      json = JSON.parse(data, symbolize_names: true)
       if json[:error]
-        p ">> Binance error (#{json[:code]}): #{json[:msg]}"
-      elsif json[:result]
-        p ">> Successfully subscribed to Binance stream: "
+        raise Error.new("(#{json[:code]}) #{json[:msg]}")
+      elsif json.key?(:result)
+        #  Binance stream connected successfully
       else
-        json.each do |payload|
-          stream_name = payload[:stream]
-          if stream_name.include?("kline")
-            @candlesticks_handler&.call(stream_name, payload[:data])
-          end
+        case json[:data][:e]&.to_sym
+        when :kline
+          @candlesticks_handler&.call(json[:stream], json[:data])
         end
       end
     end
@@ -52,21 +71,19 @@ module Binance
     end
 
     def subscribe(streams)
-      p ">> Subscribing to Binance streams: #{streams.join(", ")}"
       send({
         method: "SUBSCRIBE",
         params: streams,
         id: request_id,
-      })
+      }.to_json)
     end
 
     def unsubscribe(streams)
-      p ">> Unsubscribing from Binance streams: #{streams.join(", ")}"
       send({
         method: "UNSUBSCRIBE",
         params: streams,
         id: request_id,
-      })
+      }.to_json)
     end
   end
 end
