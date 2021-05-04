@@ -1,12 +1,12 @@
 module Binance
   class WebSocket < Faye::WebSocket::Client
-    def initialize
+    def initialize(on_open: nil, on_close: nil)
       super "wss://stream.binance.com:9443/stream", nil, ping: 180
 
       @request_id_inc = 0
 
       on :open do |event|
-        p [:open]
+        on_open&.call(event)
       end
 
       on :message do |event|
@@ -14,7 +14,7 @@ module Binance
       end
 
       on :close do |event|
-        p [:close, event.code, event.reason]
+        on_close&.call(event)
       end
     end
 
