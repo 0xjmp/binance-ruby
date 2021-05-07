@@ -3,10 +3,10 @@
 ## Features
 
 - Spot & Margin Trading
-- 100% test coverage
+- 100% test coverage (stable!)
 - Exception handling
 - Automatic timestamp and signature generation
-- Support for United States accounts
+- Support for United States (binance.us)
 
 ## Installation
 
@@ -70,13 +70,11 @@ BINANCE_TLD = US
 
 ## Usage
 
-### Examples
+### API Examples
 
 ```ruby
-# Test that API is responding.
-Binance::Api.ping! # => {}
+Binance::Api.ping!
 
-# Create a new order.
 Binance::Api::Order.create!(
   price: '0.001',
   quantity: '100.0',
@@ -87,7 +85,25 @@ Binance::Api::Order.create!(
 )
 ```
 
-I would highly recommend reading the [official Binance documentation](https://github.com/binance-exchange/binance-official-api-docs) before using this gem. Anything missed here is surely well explained there.
+### WebSocket Example
+
+```ruby
+# These callbacks are optional.
+on_open = ->(event) do
+  puts ">> Websocket opened"
+end
+on_close = ->(event) do
+  puts ">> Websocket closed (#{event.code}): #{event.reason}"
+end
+websocket = Binance::WebSocket.new(on_open: on_open, on_close: on_close)
+
+websocket.candlesticks!(['ETHBTC', '1h') do |stream_name, kline_candlestick|
+  symbol = kline_candlestick[:s]
+  # Do whatever!
+end
+```
+
+You can find more info on all `kline_candlestick` attributes & available intervals in the [binance documentation](https://github.com/binance/binance-spot-api-docs/blob/master/web-socket-streams.md#klinecandlestick-streams).
 
 ### Binance::Api class methods
 
@@ -125,9 +141,13 @@ I would highly recommend reading the [official Binance documentation](https://gi
 
 - [`create!`](https://binance-docs.github.io/apidocs/spot/en/#margin-account-new-order-trade): Create a new margin order.
 
+### Binance::WebSocket instance methods
+
+- [`candlesticks!`](https://github.com/binance/binance-spot-api-docs/blob/master/web-socket-streams.md#klinecandlestick-streams)
+
 See the [rubydoc](http://www.rubydoc.info/gems/binance-ruby/0.1.2/Binance) for information about parameters for each method listed above.
 
-For more information, please refer to the [official Rest API documentation](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md) written by the Binance team.
+For more information, please refer to the [official Rest API documentation](https://github.com/binance-exchange/binance-official-api-docs) written by the Binance team.
 
 ## Author
 
