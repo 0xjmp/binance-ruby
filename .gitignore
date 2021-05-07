@@ -16,3 +16,4 @@
 *.gem
 
 .idea/
+.byebug*

@@ -1,5 +1,7 @@
 module Binance
   class WebSocket < Faye::WebSocket::Client
+    class Error < StandardError; end
+
     def initialize(on_open: nil, on_close: nil)
       super "wss://stream.binance.com:9443/stream", nil, ping: 180
 
@@ -78,12 +80,15 @@ module Binance
       }.to_json)
     end
 
-    def unsubscribe(streams)
-      send({
-        method: "UNSUBSCRIBE",
-        params: streams,
-        id: request_id,
-      }.to_json)
-    end
+    # Terminating socket connection achieves the same result.
+    # If you have a use-case for this, please create a GitHub issue.
+    #
+    # def unsubscribe(streams)
+    #   send({
+    #     method: "UNSUBSCRIBE",
+    #     params: streams,
+    #     id: request_id,
+    #   }.to_json)
+    # end
   end
 end
