@@ -95,11 +95,13 @@ end
 on_close = ->(event) do
   puts ">> Websocket closed (#{event.code}): #{event.reason}"
 end
-websocket = Binance::WebSocket.new(on_open: on_open, on_close: on_close)
+EM.run do
+  websocket = Binance::WebSocket.new(on_open: on_open, on_close: on_close)
 
-websocket.candlesticks!(['ETHBTC', '1h') do |stream_name, kline_candlestick|
-  symbol = kline_candlestick[:s]
-  # Do whatever!
+  websocket.candlesticks!(['ETHBTC', '1h') do |stream_name, kline_candlestick|
+    symbol = kline_candlestick[:s]
+    # Do whatever!
+  end
 end
 ```
 
