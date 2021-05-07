@@ -145,7 +145,7 @@ You can find more info on all `kline_candlestick` attributes & available interva
 
 ### Binance::WebSocket instance methods
 
-- [`candlesticks!`](https://github.com/binance/binance-spot-api-docs/blob/master/web-socket-streams.md#klinecandlestick-streams)
+- [`candlesticks!`](https://github.com/binance/binance-spot-api-docs/blob/master/web-socket-streams.md#klinecandlestick-streams): Kline/candlestick bars for a symbol.
 
 See the [rubydoc](http://www.rubydoc.info/gems/binance-ruby/0.1.2/Binance) for information about parameters for each method listed above.
 
