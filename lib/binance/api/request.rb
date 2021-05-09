@@ -10,8 +10,10 @@ module Binance
           raise Error.new(message: "invalid security type #{security_type}") unless security_types.include?(security_type)
           all_headers = default_headers(api_key_type: api_key_type, security_type: security_type, api_key: api_key)
           params.delete_if { |k, v| v.nil? }
-          signature = signed_request_signature(params: params, api_secret_key: api_secret_key)
-          params.merge!(signature: signature) if [:trade, :user_data].include?(security_type)
+          if %w(trade user_data).include?(security_type&.to_s)
+            signature = signed_request_signature(params: params, api_secret_key: api_secret_key)
+            params.merge!(signature: signature)
+          end
           # send() is insecure so don't use it.
           case method
           when :get

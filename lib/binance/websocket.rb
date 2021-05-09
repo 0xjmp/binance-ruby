@@ -6,6 +6,7 @@ module Binance
       super "wss://stream.binance.com:9443/stream", nil, ping: 180
 
       @request_id_inc = 0
+      @user_stream_handlers = {}
 
       on :open do |event|
         on_open&.call(event)
@@ -52,6 +53,11 @@ module Binance
       subscribe(symbols_fmt.map { |s| "#{s.downcase}@kline_#{interval}" })
     end
 
+    def user_data_stream!(listen_key, &on_receive)
+      @user_stream_handlers[listen_key] = on_receive
+      subscribe([listen_key])
+    end
+
     private
 
     def process_data(data)
@@ -64,6 +70,11 @@ module Binance
         case json[:data][:e]&.to_sym
         when :kline
           @candlesticks_handler&.call(json[:stream], json[:data])
+        when :outboundAccountPosition
+        when :balanceUpdate
+        when :executionReport # order update
+          listen_key = json[:stream]
+          @user_stream_handlers[listen_key]&.call(listen_key, json[:data])
         end
       end
     end
