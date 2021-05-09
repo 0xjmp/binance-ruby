@@ -85,7 +85,9 @@ Binance::Api::Order.create!(
 )
 ```
 
-### WebSocket Example
+### WebSocket Examples
+
+**Candlesticks:**
 
 ```ruby
 # These callbacks are optional.
@@ -101,6 +103,27 @@ EM.run do
   websocket.candlesticks!(['ETHBTC', '1h') do |stream_name, kline_candlestick|
     symbol = kline_candlestick[:s]
     # Do whatever!
+  end
+end
+```
+
+**User Data:**
+
+```ruby
+EM.run do
+  websocket = Binance::WebSocket.new
+
+  # Be sure to call keepalive! roughly every 30 minutes
+  listen_key = Binance::Api::UserDataStream.start!
+  websocket.user_data_stream!(listen_key) do |listen_key, data|
+    case data[:e].to_sym # event type
+    when :outboundAccountPosition
+      # Account update
+    when :balanceUpdate
+      # Balance update
+    when :executionReport
+      # Order update
+    end
   end
 end
 ```
@@ -146,6 +169,7 @@ You can find more info on all `kline_candlestick` attributes & available interva
 ### Binance::WebSocket instance methods
 
 - [`candlesticks!`](https://github.com/binance/binance-spot-api-docs/blob/master/web-socket-streams.md#klinecandlestick-streams): Kline/candlestick bars for a symbol.
+- [`user_data_stream!`](https://github.com/binance/binance-spot-api-docs/blob/master/user-data-stream.md#web-socket-payloads): account updates, balances changes, and order updates.
 
 See the [rubydoc](http://www.rubydoc.info/gems/binance-ruby/0.1.2/Binance) for information about parameters for each method listed above.
 
