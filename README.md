@@ -100,7 +100,7 @@ end
 EM.run do
   websocket = Binance::WebSocket.new(on_open: on_open, on_close: on_close)
 
-  websocket.candlesticks!(['ETHBTC', '1h') do |stream_name, kline_candlestick|
+  websocket.candlesticks!(['ETHBTC'], '1h') do |stream_name, kline_candlestick|
     symbol = kline_candlestick[:s]
     # Do whatever!
   end
