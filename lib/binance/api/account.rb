@@ -27,6 +27,23 @@ module Binance
                         params: params.delete_if { |key, value| value.nil? },
                         security_type: :user_data, api_key: api_key, api_secret_key: api_secret_key)
         end
+
+        # @note have not tested this for binance.us yet.
+        def withdraw!(coin: nil, withdrawOrderId: nil, network: nil, address: nil, addressTag: nil, amount: nil,
+                      transactionFeeFlag: false, name: nil, recvWindow: nil, api_key: nil, api_secret_key: nil)
+          raise Error.new(message: "amount is required") if amount.nil?
+          raise Error.new(message: "coin is required") if coin.nil?
+          raise Error.new(message: "address is required") if address.nil?
+          timestamp = Configuration.timestamp
+          params = {
+            coin: coin, withdrawOrderId: withdrawOrderId, network: network, address: address, timestamp: timestamp,
+            addressTag: addressTag, amount: amount, transactionFeeFlag: transactionFeeFlag,
+            name: name, recvWindow: recvWindow,
+          }
+          Request.send!(api_key_type: :read_info, path: "/sapi/v1/capital/withdraw/apply",
+                        params: params.delete_if { |key, value| value.nil? }, method: :post,
+                        security_type: :user_data, api_key: api_key, api_secret_key: api_secret_key)
+        end
       end
     end
   end

@@ -147,6 +147,7 @@ You can find more info on all `kline_candlestick` attributes & available interva
 - [`fees!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/wapi-api.md#asset-detail-user_data): Get withdrawal information (status, minimum amount and fees) for all symbols.
 - [`info!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#account-information-user_data): Get current account information.
 - [`trades!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#account-trade-list-user_data): Get trades for a specific account and symbol.
+- [`withdraw!`](https://binance-docs.github.io/apidocs/spot/en/#withdraw-sapi): Submit a withdraw request. _I haven't confirmed this works for binance.us yet. If you find that it does, please submit a PR!_
 
 ### Binance::Api::DataStream class methods
 
