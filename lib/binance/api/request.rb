@@ -19,6 +19,7 @@ module Binance
           when :get
             response = get(path, headers: all_headers, query: params)
           when :post
+            byebug
             response = post(path, body: params, headers: all_headers)
           when :put
             response = put(path, body: params, headers: all_headers)
