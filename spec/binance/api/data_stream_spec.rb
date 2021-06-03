@@ -21,7 +21,7 @@ RSpec.describe Binance::Api::UserDataStream do
       context "but api responds with error" do
         let!(:request_stub) do
           stub_request(:put, "https://api.binance.com/api/v1/userDataStream")
-            .with(body: request_body)
+            .with(query: request_body)
             .to_return(status: 400, body: { msg: "error", code: "400" }.to_json)
         end
 
@@ -36,7 +36,7 @@ RSpec.describe Binance::Api::UserDataStream do
       context "and api succeeds" do
         let!(:request_stub) do
           stub_request(:put, "https://api.binance.com/api/v1/userDataStream")
-            .with(body: request_body)
+            .with(query: request_body)
             .to_return(status: 200, body: "{}")
         end
 
@@ -103,7 +103,7 @@ RSpec.describe Binance::Api::UserDataStream do
       context "but api responds with error" do
         let!(:request_stub) do
           stub_request(:delete, "https://api.binance.com/api/v1/userDataStream")
-            .with(body: request_body)
+            .with(query: request_body)
             .to_return(status: 400, body: { msg: "error", code: "400" }.to_json)
         end
 
@@ -118,7 +118,7 @@ RSpec.describe Binance::Api::UserDataStream do
       context "and api succeeds" do
         let!(:request_stub) do
           stub_request(:delete, "https://api.binance.com/api/v1/userDataStream")
-            .with(body: request_body)
+            .with(query: request_body)
             .to_return(status: 200, body: "{}")
         end
 

@@ -198,7 +198,7 @@ RSpec.describe Binance::Api::Account do
       context "but api responds with error" do
         let!(:request_stub) do
           stub_request(:post, "https://api.binance.com/sapi/v1/capital/withdraw/apply")
-            .with(body: query_string + "&signature=#{signature}")
+            .with(query: query_string + "&signature=#{signature}")
             .to_return(status: 400, body: { msg: "error", code: "400" }.to_json)
         end
 
@@ -213,7 +213,7 @@ RSpec.describe Binance::Api::Account do
       context "and api succeeds" do
         let!(:request_stub) do
           stub_request(:post, "https://api.binance.com/sapi/v1/capital/withdraw/apply")
-            .with(body: query_string + "&signature=#{signature}")
+            .with(query: query_string + "&signature=#{signature}")
             .to_return(status: 200, body: '{"id":"7213fea8e94b4a5593d507237e5a555b"}')
         end
 
