@@ -40,7 +40,7 @@ module Binance
             addressTag: addressTag, amount: amount, transactionFeeFlag: transactionFeeFlag,
             name: name, recvWindow: recvWindow,
           }
-          Request.send!(api_key_type: :read_info, path: "/sapi/v1/capital/withdraw/apply",
+          Request.send!(api_key_type: :withdrawals, path: "/sapi/v1/capital/withdraw/apply",
                         params: params.delete_if { |key, value| value.nil? }, method: :post,
                         security_type: :user_data, api_key: api_key, api_secret_key: api_secret_key)
         end
