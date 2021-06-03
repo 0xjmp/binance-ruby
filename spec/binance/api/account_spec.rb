@@ -228,4 +228,50 @@ RSpec.describe Binance::Api::Account do
       end
     end
   end
+
+  describe "#withdraw_history!" do
+    let(:coin) { "ETH" }
+    let(:params) { { coin: coin, timestamp: timestamp } }
+    let(:query_string) { params.delete_if { |key, value| value.nil? }.map { |key, value| "#{key}=#{value}" }.join("&") }
+    let(:signature) do
+      signature_string = Binance::Api::Configuration.signed_request_signature(payload: query_string)
+      CGI.escape(signature_string)
+    end
+    let(:timestamp) { Binance::Api::Configuration.timestamp }
+
+    subject { Binance::Api::Account.withdraw_history!(coin: coin) }
+
+    context "when api responds with error" do
+      let!(:request_stub) do
+        stub_request(:get, "https://api.binance.com/sapi/v1/capital/withdraw/history")
+          .with(query: query_string + "&signature=#{signature}")
+          .to_return(status: 400, body: { msg: "error", code: "400" }.to_json)
+      end
+
+      it { is_expected_block.to raise_error Binance::Api::Error }
+
+      it "should send api request" do
+        subject rescue Binance::Api::Error
+        expect(request_stub).to have_been_requested
+      end
+    end
+
+    context "when api succeeds" do
+      let!(:request_stub) do
+        stub_request(:get, "https://api.binance.com/sapi/v1/capital/withdraw/history")
+          .with(query: query_string + "&signature=#{signature}")
+          .to_return(status: 200, body: File.read("spec/fixtures/withdraw_history.json"))
+      end
+
+      it "has withdraw keys" do
+        expect(subject.first).to include(:address, :amount, :applyTime, :coin, :id, :withdrawOrderId,
+                                         :network, :status, :transferType, :txId)
+      end
+
+      it "should send api request" do
+        subject rescue Binance::Api::Error
+        expect(request_stub).to have_been_requested
+      end
+    end
+  end
 end
