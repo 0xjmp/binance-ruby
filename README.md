@@ -83,12 +83,10 @@ BINANCE_TLD = US
 Binance::Api.ping!
 
 Binance::Api::Order.create!(
-  price: '0.001',
   quantity: '100.0',
   side: 'BUY',
   symbol: 'XRPBTC',
-  timeInForce: 'GTC',
-  type: 'STOP_LIMIT'
+  type: 'MARKET'
 )
 ```
 
