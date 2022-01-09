@@ -107,6 +107,26 @@ EM.run do
 end
 ```
 
+**Trades:**
+
+```ruby
+# These callbacks are optional.
+on_open = ->(event) do
+  puts ">> Websocket opened"
+end
+on_close = ->(event) do
+  puts ">> Websocket closed (#{event.code}): #{event.reason}"
+end
+EM.run do
+  websocket = Binance::WebSocket.new(on_open: on_open, on_close: on_close)
+
+  websocket.trades!(['ETHBTC']) do |stream_name, trade|
+    symbol = trade[:s]
+    # Do whatever!
+  end
+end
+```
+
 **User Data:**
 
 ```ruby
@@ -170,6 +190,7 @@ You can find more info on all `kline_candlestick` attributes & available interva
 ### Binance::WebSocket instance methods
 
 - [`candlesticks!`](https://github.com/binance/binance-spot-api-docs/blob/master/web-socket-streams.md#klinecandlestick-streams): Kline/candlestick bars for a symbol.
+- [`trades!`](https://github.com/binance/binance-spot-api-docs/blob/master/web-socket-streams.md#trade-streams): The Trade Streams push raw trade information.
 - [`user_data_stream!`](https://github.com/binance/binance-spot-api-docs/blob/master/user-data-stream.md#web-socket-payloads): account updates, balances changes, and order updates.
 
 See the [rubydoc](http://www.rubydoc.info/gems/binance-ruby/0.1.2/Binance) for information about parameters for each method listed above.
