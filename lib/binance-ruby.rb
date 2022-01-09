@@ -1,4 +1,11 @@
+require 'active_support/version'
+
+if ActiveSupport::VERSION::MAJOR > 6
+    require "active_support/isolated_execution_state" 
+end 
+
 require "active_support/core_ext/string"
+
 require "awrence"
 require "httparty"
 require "faye/websocket"
