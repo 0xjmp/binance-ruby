@@ -58,6 +58,26 @@ module Binance
       subscribe([listen_key])
     end
 
+    # stream name: <symbol>@trade
+    # {
+    #   "e": "trade",     // Event type
+    #   "E": 123456789,   // Event time
+    #   "s": "BNBBTC",    // Symbol
+    #   "t": 12345,       // Trade ID
+    #   "p": "0.001",     // Price
+    #   "q": "100",       // Quantity
+    #   "b": 88,          // Buyer order ID
+    #   "a": 50,          // Seller order ID
+    #   "T": 123456785,   // Trade time
+    #   "m": true,        // Is the buyer the market maker?
+    #   "M": true         // Ignore
+    # }
+    def trade!(symbols, &on_receive)
+      symbols_fmt = symbols.is_a?(String) ? [symbols] : symbols
+      @trade_handler = on_receive
+      subscribe(symbols_fmt.map { |s| "#{s.downcase}@trade" })
+    end
+
     private
 
     def process_data(data)
@@ -75,6 +95,8 @@ module Binance
         when :executionReport # order update
           listen_key = json[:stream]
           @user_stream_handlers[listen_key]&.call(listen_key, json[:data])
+        when :trade
+          @trade_handler&.call(json[:stream], json[:data])
         end
       end
     end
