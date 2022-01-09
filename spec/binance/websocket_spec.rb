@@ -52,7 +52,7 @@ RSpec.describe Binance::WebSocket do
 
       it "calls on_receive" do
         inc = 0
-        websocket.trade!(symbols) { inc = 1 }
+        websocket.trades!(symbols) { inc = 1 }
         expect(inc).to eq 1
       end
     end
