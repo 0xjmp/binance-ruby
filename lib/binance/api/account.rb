@@ -2,7 +2,7 @@ module Binance
   module Api
     class Account
       class << self
-        def fees!(recvWindow: 5000, api_key: nil, api_secret_key: nil)
+        def fees!(recvWindow: nil, api_key: nil, api_secret_key: nil)
           timestamp = Configuration.timestamp
           params = { recvWindow: recvWindow, timestamp: timestamp }
           Request.send!(api_key_type: :read_info, path: "/wapi/v3/assetDetail.html",
@@ -10,7 +10,7 @@ module Binance
                         security_type: :user_data, api_key: api_key, api_secret_key: api_secret_key)
         end
 
-        def info!(recvWindow: 5000, api_key: nil, api_secret_key: nil)
+        def info!(recvWindow: nil, api_key: nil, api_secret_key: nil)
           timestamp = Configuration.timestamp
           params = { recvWindow: recvWindow, timestamp: timestamp }
           Request.send!(api_key_type: :read_info, path: "/api/v3/account",
@@ -42,6 +42,19 @@ module Binance
           }
           Request.send!(api_key_type: :withdrawals, path: "/sapi/v1/capital/withdraw/apply",
                         params: params.delete_if { |key, value| value.nil? }, method: :post,
+                        security_type: :user_data, api_key: api_key, api_secret_key: api_secret_key)
+        end
+
+        # If both startTime and endTime are sent, time between startTime and endTime must be less than 90 days.
+        def withdraw_history!(coin: nil, status: nil, offset: nil, limit: nil, startTime: nil, endTime: nil,
+                              recvWindow: nil, api_key: nil, api_secret_key: nil)
+          timestamp = Configuration.timestamp
+          params = {
+            coin: coin, status: status, offset: offset, limit: limit, startTime: startTime,
+            endTime: endTime, recvWindow: recvWindow, timestamp: timestamp,
+          }
+          Request.send!(api_key_type: :withdrawals, path: "/sapi/v1/capital/withdraw/history",
+                        params: params.delete_if { |key, value| value.nil? }, method: :get,
                         security_type: :user_data, api_key: api_key, api_secret_key: api_secret_key)
         end
       end
