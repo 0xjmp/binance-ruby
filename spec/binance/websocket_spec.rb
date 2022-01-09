@@ -31,34 +31,6 @@ RSpec.describe Binance::WebSocket do
     end
   end
 
-  describe "#trades" do 
-    let(:stream_name) { "#{symbols.first.downcase}@kline" }
-
-    context "error" do
-      let(:json_string) { '{ "error": {"code": 0, "msg": "Unknown property","id": 123} }' }
-
-      subject { websocket.trades!(symbols) }
-
-      it { is_expected_block.to raise_error Binance::WebSocket::Error }
-    end
-
-    context "trade" do
-      let(:json_string) do
-        {
-          stream: stream_name,
-          data: JSON.parse(File.read("spec/fixtures/streams/trade.json"), symbolize_names: true),
-        }.to_json
-      end
-
-      it "calls on_receive" do
-        inc = 0
-        websocket.trades!(symbols) { inc = 1 }
-        expect(inc).to eq 1
-      end
-    end
-
-  end 
-  
   describe "#candlesticks" do
     let(:stream_name) { "#{symbols.first.downcase}@kline_#{interval}" }
 
