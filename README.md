@@ -104,6 +104,11 @@ EM.run do
     symbol = kline_candlestick[:s]
     # Do whatever!
   end
+
+  websocket.trades!(['ETHBTC']) do |stream_name, trade|
+    symbol = trade[:s]
+    # Do whatever!
+  end
 end
 ```
 

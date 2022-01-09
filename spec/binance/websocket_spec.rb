@@ -31,13 +31,13 @@ RSpec.describe Binance::WebSocket do
     end
   end
 
-  describe "#trade" do 
+  describe "#trades" do 
     let(:stream_name) { "#{symbols.first.downcase}@kline" }
 
     context "error" do
       let(:json_string) { '{ "error": {"code": 0, "msg": "Unknown property","id": 123} }' }
 
-      subject { websocket.trade!(symbols) }
+      subject { websocket.trades!(symbols) }
 
       it { is_expected_block.to raise_error Binance::WebSocket::Error }
     end
