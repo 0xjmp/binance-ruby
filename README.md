@@ -60,7 +60,6 @@ Binance::Api::Configuration.withdrawals_api_key = nil
 
 If any one of these keys are not defined, `binance-ruby` will fallback to `BINANCE_API_KEY`/`Binance::Api::Configuration.api_key`.
 
-
 If you want to use binance test net to test the feature, you could configure the following environment variable:
 
 ```bash
@@ -83,10 +82,7 @@ BINANCE_TLD = US
 Binance::Api.ping!
 
 Binance::Api::Order.create!(
-  quantity: '100.0',
-  side: 'BUY',
-  symbol: 'XRPBTC',
-  type: 'MARKET'
+  quantity: '100.0', side: 'BUY', symbol: 'XRPBTC', type: 'MARKET'
 )
 ```
 
@@ -95,19 +91,14 @@ Binance::Api::Order.create!(
 **Candlesticks:**
 
 ```ruby
-# These callbacks are optional.
-on_open = ->(event) do
-  puts ">> Websocket opened"
-end
-on_close = ->(event) do
-  puts ">> Websocket closed (#{event.code}): #{event.reason}"
-end
+on_open = ->(event) { puts '>> Websocket opened' }
+on_close =
+  ->(event) { puts ">> Websocket closed (#{event.code}): #{event.reason}" }
 EM.run do
   websocket = Binance::WebSocket.new(on_open: on_open, on_close: on_close)
 
-  websocket.candlesticks!(['ETHBTC'], '1h') do |stream_name, kline_candlestick|
+  websocket.candlesticks!(%w[ETHBTC], '1h') do |stream_name, kline_candlestick|
     symbol = kline_candlestick[:s]
-    # Do whatever!
   end
 end
 ```
@@ -115,20 +106,13 @@ end
 **Trades:**
 
 ```ruby
-# These callbacks are optional.
-on_open = ->(event) do
-  puts ">> Websocket opened"
-end
-on_close = ->(event) do
-  puts ">> Websocket closed (#{event.code}): #{event.reason}"
-end
+on_open = ->(event) { puts '>> Websocket opened' }
+on_close =
+  ->(event) { puts ">> Websocket closed (#{event.code}): #{event.reason}" }
 EM.run do
   websocket = Binance::WebSocket.new(on_open: on_open, on_close: on_close)
 
-  websocket.trades!(['ETHBTC']) do |stream_name, trade|
-    symbol = trade[:s]
-    # Do whatever!
-  end
+  websocket.trades!(%w[ETHBTC]) { |stream_name, trade| symbol = trade[:s] }
 end
 ```
 
@@ -138,16 +122,12 @@ end
 EM.run do
   websocket = Binance::WebSocket.new
 
-  # Be sure to call keepalive! roughly every 30 minutes
   listen_key = Binance::Api::UserDataStream.start!
   websocket.user_data_stream!(listen_key) do |listen_key, data|
-    case data[:e].to_sym # event type
+    case data[:e].to_sym
     when :outboundAccountPosition
-      # Account update
     when :balanceUpdate
-      # Balance update
     when :executionReport
-      # Order update
     end
   end
 end
@@ -206,15 +186,7 @@ For more information, please refer to the [official Rest API documentation](http
 
 [Jake Peterson](https://jakenberg.io)
 
-I drink beer 😉
-
-**BTC**: `1EZTj5rEaKE9dEBjR1wiismwma4XpXtLBz`
-
-**ETH**: `0xf61195dcb1e89f139114e599cf1dd37dd8b7b96a`
-
-**LTC**: `LL3Nf7CmLoFeLENSKN6WhgPNVuxjzgh2eV`
-
-**BCH**: [Bcash. LOL](https://www.youtube.com/watch?v=oCOjCEth6xI)
+If this library helped you please consider donating (send whatever crypto you want): `0xB5BaA3D2056be942a9F61Cc015b83562DA3C15B2`
 
 ## Development
 
