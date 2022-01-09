@@ -1,4 +1,4 @@
-require "active_support/core_ext/string"
+require "active_support"
 require "awrence"
 require "httparty"
 require "faye/websocket"
