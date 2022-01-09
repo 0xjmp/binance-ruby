@@ -60,6 +60,13 @@ Binance::Api::Configuration.withdrawals_api_key = nil
 
 If any one of these keys are not defined, `binance-ruby` will fallback to `BINANCE_API_KEY`/`Binance::Api::Configuration.api_key`.
 
+
+If you want to use binance test net to test the feature, you could configure the following environment variable:
+
+```bash
+BINANCE_TEST_NET_ENABLE=true
+```
+
 ### Accounts in the USA
 
 If your Binance account is based in the United States (www.binance.us), you will need to specify that in an environment variable:
@@ -76,12 +83,10 @@ BINANCE_TLD = US
 Binance::Api.ping!
 
 Binance::Api::Order.create!(
-  price: '0.001',
   quantity: '100.0',
   side: 'BUY',
   symbol: 'XRPBTC',
-  timeInForce: 'GTC',
-  type: 'STOP_LIMIT'
+  type: 'MARKET'
 )
 ```
 
