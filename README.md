@@ -104,6 +104,21 @@ EM.run do
     symbol = kline_candlestick[:s]
     # Do whatever!
   end
+end
+```
+
+**Trades:**
+
+```ruby
+# These callbacks are optional.
+on_open = ->(event) do
+  puts ">> Websocket opened"
+end
+on_close = ->(event) do
+  puts ">> Websocket closed (#{event.code}): #{event.reason}"
+end
+EM.run do
+  websocket = Binance::WebSocket.new(on_open: on_open, on_close: on_close)
 
   websocket.trades!(['ETHBTC']) do |stream_name, trade|
     symbol = trade[:s]
