@@ -1,6 +1,14 @@
 module Binance
   module Api
     class << self
+      def all_coins_info!(recvWindow: nil, api_key: nil, api_secret_key: nil)
+        timestamp = Configuration.timestamp
+        params = { recvWindow: recvWindow, timestamp: timestamp }
+        Request.send!(api_key_type: :read_info, security_type: :user_data,
+                      path: "/sapi/v1/capital/config/getall", params: params,
+                      api_key: api_key, api_secret_key: api_secret_key)
+      end
+
       # Valid limits:[5, 10, 20, 50, 100, 500, 1000]
       def candlesticks!(endTime: nil, interval: nil, limit: 500, startTime: nil, symbol: nil, api_key: nil, api_secret_key: nil)
         raise Error.new(message: "interval is required") unless interval
