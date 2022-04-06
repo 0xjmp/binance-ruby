@@ -77,6 +77,13 @@ module Binance
         Request.send!(api_key_type: :read_info, path: "/api/v1/trades", params: params,
                       api_key: api_key, api_secret_key: api_secret_key)
       end
+      
+      def avg!(symbol: nil, api_key: nil, api_secret_key: nil)
+        raise Error.new(message: "symbol is required") unless symbol
+        params = { symbol: symbol }
+        Request.send!(api_key_type: :read_info, path: "/api/v3/avgPrice", params: params,
+                      api_key: api_key, api_secret_key: api_secret_key)
+      end
 
       private
 
