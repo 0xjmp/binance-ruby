@@ -36,6 +36,21 @@ module Binance
                           api_key: api_key, api_secret_key: api_secret_key)
           end
 
+          def status!(orderId: nil, originalClientOrderId: nil, recvWindow: nil, symbol: nil,
+                      api_key: nil, api_secret_key: nil, isIsolated: false)
+            raise Error.new(message: "symbol is required") if symbol.nil?
+            raise Error.new(message: "either orderid or originalclientorderid " \
+                            "is required") if orderId.nil? && originalClientOrderId.nil?
+            timestamp = Configuration.timestamp
+            params = {
+              orderId: orderId, origClientOrderId: originalClientOrderId, recvWindow: recvWindow,
+              symbol: symbol, timestamp: timestamp, isIsolated: isIsolated
+            }.delete_if { |key, value| value.nil? }
+            Request.send!(api_key_type: :trading, path: "/sapi/v1/margin/order",
+                          params: params, security_type: :user_data, tld: Configuration.tld, api_key: api_key,
+                          api_secret_key: api_secret_key)
+          end
+
           private
 
           def additional_required_create_keys(type:)
