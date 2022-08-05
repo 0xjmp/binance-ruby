@@ -35,7 +35,7 @@ module Binance
       end
 
       def exchange_info!(api_key: nil, api_secret_key: nil, symbol: nil)
-        arams = symbol ? { symbol: symbol } : {}
+        params = symbol ? { symbol: symbol } : {}
         Request.send!(api_key_type: :read_info, path: "/api/v3/exchangeInfo",
                       api_key: api_key, api_secret_key: api_secret_key, params: params)
       end
