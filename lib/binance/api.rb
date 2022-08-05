@@ -34,9 +34,10 @@ module Binance
                       api_key: api_key, api_secret_key: api_secret_key)
       end
 
-      def exchange_info!(api_key: nil, api_secret_key: nil)
-        Request.send!(api_key_type: :read_info, path: "/api/v1/exchangeInfo",
-                      api_key: api_key, api_secret_key: api_secret_key)
+      def exchange_info!(api_key: nil, api_secret_key: nil, symbol: nil)
+        arams = symbol ? { symbol: symbol } : {}
+        Request.send!(api_key_type: :read_info, path: "/api/v3/exchangeInfo",
+                      api_key: api_key, api_secret_key: api_secret_key, params: params)
       end
 
       def historical_trades!(symbol: nil, limit: 500, fromId: nil, api_key: nil, api_secret_key: nil)
