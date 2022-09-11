@@ -312,8 +312,9 @@ RSpec.describe Binance::Api do
 
   describe "#ticker!" do
     let(:symbol) { nil }
+    let(:symbols) { nil }
 
-    subject { Binance::Api.ticker!(symbol: symbol, type: type) }
+    subject { Binance::Api.ticker!(symbol: symbol, symbols: symbols, type: type) }
 
     shared_examples "a valid ticker request" do
       shared_examples "valid api responses" do
@@ -340,6 +341,12 @@ RSpec.describe Binance::Api do
 
       context "when symbol is not nil" do
         let(:symbol) { "BTCLTC" }
+
+        include_examples "valid api responses"
+      end
+
+      context "when symbols is not nil" do
+        let(:symbols) { ["BTCLTC", "DOTUSDT"] }
 
         include_examples "valid api responses"
       end
@@ -386,6 +393,7 @@ RSpec.describe Binance::Api do
       let!(:request_stub) do
         url = "https://api.binance.com/api/v3/ticker/price"
         url += "?symbol=#{symbol}" if symbol
+        url += "?symbols=#{symbols.to_s.delete(" ")}" if symbols
         stub_request(:get, url).to_return(stub_response)
       end
       let(:type) { :price }
