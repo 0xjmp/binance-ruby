@@ -2,6 +2,8 @@ module Binance
   module Api
     class Request
       include HTTParty
+      http_proxy 'http://us-east-static-09.quotaguard.com', 9293, Rails.application.credentials.quotaguard.user, Rails.application.credentials.quotaguard.password
+
       class << self
         def send!(api_key_type: :none, headers: {}, method: :get, path: "/", params: {}, security_type: :none, tld: Configuration.tld, api_key: nil, api_secret_key: nil)
           Configuration.validate_tld!(tld)
