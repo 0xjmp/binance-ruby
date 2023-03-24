@@ -3,7 +3,9 @@ module Binance
     class Error < StandardError; end
 
     def initialize(on_open: nil, on_close: nil)
-      super "wss://stream.binance.com:9443/stream", nil, ping: 180
+      wss_uri = ENV['BINANCE_TEST_NET_ENABLE'] ? "wss://testnet.binance.vision/stream" : "wss://stream.binance.com:9443/stream"
+
+      super wss_uri, nil, ping: 180
 
       @request_id_inc = 0
       @user_stream_handlers = {}
