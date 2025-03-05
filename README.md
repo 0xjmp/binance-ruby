@@ -152,13 +152,18 @@ You can find more info on all `kline_candlestick` attributes & available interva
 - [`fees!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/wapi-api.md#asset-detail-user_data): Get withdrawal information (status, minimum amount and fees) for all symbols.
 - [`info!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#account-information-user_data): Get current account information.
 - [`trades!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#account-trade-list-user_data): Get trades for a specific account and symbol.
-- [`withdraw!`](https://binance-docs.github.io/apidocs/spot/en/#withdraw-sapi): Submit a withdraw request. _I haven't confirmed this works for binance.us yet. If you find that it does, please submit a PR!_
+- [`withdraw!`](https://binance-docs.github.io/apidocs/spot/en/#withdraw-sapi): Submit a withdraw request.
+- [`withdraw_history!`](https://binance-docs.github.io/apidocs/spot/en/#withdraw-history-supporting-network-user_data): Get withdrawal history.
+- [`deposit_history`](https://binance-docs.github.io/apidocs/spot/en/#fiat-deposit-history-user_data): Get fiat deposit history.
+- [`withdraw_history`](https://binance-docs.github.io/apidocs/spot/en/#fiat-withdraw-history-user_data): Get fiat withdrawal history.
 
 ### Binance::Api::DataStream class methods
 
-- [`start!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#start-user-data-stream-user_stream): Start a new user data stream. The stream will close after 60 minutes unless a keepalive is sent.
-- [`keepalive!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#keepalive-user-data-stream-user_stream): Keepalive a user data stream to prevent a time out. User data streams will close after 60 minutes. It's recommended to send a ping about every 30 minutes.
+- [`start!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#start-user-data-stream-user_stream): Start a new user data stream.
+- [`keepalive!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#keepalive-user-data-stream-user_stream): Keepalive a user data stream.
 - [`stop!`](https://github.com/binance-exchange/binance-official-api-docs/blob/master/rest-api.md#close-user-data-stream-user_stream): Close out a user data stream.
+- [`margin_start!`](https://binance-docs.github.io/apidocs/spot/en/#start-user-data-stream-user_stream): Start a new margin user data stream.
+- [`margin_keepalive!`](https://binance-docs.github.io/apidocs/spot/en/#keepalive-user-data-stream-user_stream): Keepalive a margin user data stream.
 
 ### Binance::Api::Order class methods
 
@@ -176,7 +181,7 @@ You can find more info on all `kline_candlestick` attributes & available interva
 
 - [`candlesticks!`](https://github.com/binance/binance-spot-api-docs/blob/master/web-socket-streams.md#klinecandlestick-streams): Kline/candlestick bars for a symbol.
 - [`trades!`](https://github.com/binance/binance-spot-api-docs/blob/master/web-socket-streams.md#trade-streams): The Trade Streams push raw trade information.
-- [`user_data_stream!`](https://github.com/binance/binance-spot-api-docs/blob/master/user-data-stream.md#web-socket-payloads): account updates, balances changes, and order updates.
+- [`user_data_stream!`](https://github.com/binance/binance-spot-api-docs/blob/master/user-data-stream.md#web-socket-payloads): Account updates, balances changes, and order updates.
 
 See the [rubydoc](http://www.rubydoc.info/gems/binance-ruby/0.1.2/Binance) for information about parameters for each method listed above.
 
@@ -185,6 +190,10 @@ For more information, please refer to the [official Rest API documentation](http
 ## Author
 
 [Jake Peterson](https://jakenberg.io)
+
+### Contributors
+- @mikemikehe - Withdraw/Deposit functions
+- @Zigngit - WebSocket support
 
 If this library helped you please consider donating (send whatever crypto you want): `0xB5BaA3D2056be942a9F61Cc015b83562DA3C15B2`
 
