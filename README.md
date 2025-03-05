@@ -6,7 +6,7 @@
 - Test coverage (stable!)
 - Exception handling
 - Automatic timestamp and signature generation
-- Support for United States (binance.us)
+- Supports requests to binance.com or binance.us
 - Websocket support
 
 ## Installation
