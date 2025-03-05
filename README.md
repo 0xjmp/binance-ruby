@@ -190,7 +190,7 @@ For more information, please refer to the [official Rest API documentation](http
 
 ## Author
 
-[Jake Peterson](https://jakenberg.io)
+[Jake Peterson](https://linkedin.com/in/jakepeterso)
 
 ### Contributors
 - @mikemikehe - Withdraw/Deposit functions
