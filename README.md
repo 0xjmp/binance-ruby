@@ -193,8 +193,8 @@ For more information, please refer to the [official Rest API documentation](http
 [Jake Peterson](https://linkedin.com/in/jakepeterso)
 
 ### Contributors
-- @mikemikehe - Withdraw/Deposit functions
-- @Zigngit - WebSocket support
+- [@mikemikehe](github.com/mikemikehe) - Withdraw/Deposit functions
+- [@Zigngit](github.com/Zigngit) - WebSocket support
 
 If this library helped you please consider donating (send whatever crypto you want): `0xB5BaA3D2056be942a9F61Cc015b83562DA3C15B2`
 
