@@ -2,6 +2,10 @@ module Binance
   module Api
     class << self
       def all_coins_info!(recvWindow: nil, api_key: nil, api_secret_key: nil)
+        if Configuration.base_url.include?("testnet")
+          raise Error.new(message: "use mainnet for this method. testnet is meant for spot trading and order execution.")
+        end
+        
         timestamp = Configuration.timestamp
         params = { recvWindow: recvWindow, timestamp: timestamp }
         Request.send!(api_key_type: :read_info, security_type: :user_data,
