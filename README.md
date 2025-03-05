@@ -3,10 +3,11 @@
 ## Features
 
 - Spot & Margin Trading
-- 100% test coverage (stable!)
+- Test coverage (stable!)
 - Exception handling
 - Automatic timestamp and signature generation
 - Support for United States (binance.us)
+- Websocket support
 
 ## Installation
 
