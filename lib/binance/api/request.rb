@@ -3,10 +3,13 @@ module Binance
     class Request
       include HTTParty
       class << self
-        def send!(api_key_type: :none, headers: {}, method: :get, path: "/", params: {}, security_type: :none, tld: Configuration.tld, api_key: nil, api_secret_key: nil)
+        def send!(api_section: :spot, api_key_type: :none, headers: {}, method: :get, path: "/", params: {},
+                  security_type: :none, tld: Configuration.tld, api_key: nil, api_secret_key: nil)
           Configuration.validate_tld!(tld)
-          binance_uri = ENV['BINANCE_TEST_NET_ENABLE'] ? "https://testnet.binance.vision" : "https://api.binance.#{tld}"
-          self.base_uri binance_uri
+          raise Error.new(message: "invalid api section #{api_section}") unless binance_uris(tld).keys.include?(api_section)
+
+          env = ENV['BINANCE_TEST_NET_ENABLE'] ? :test : :prod
+          self.base_uri binance_uris(tld)[api_section][env]
 
           raise Error.new(message: "invalid security type #{security_type}") unless security_types.include?(security_type)
           all_headers = default_headers(api_key_type: api_key_type, security_type: security_type, api_key: api_key)
@@ -32,6 +35,19 @@ module Binance
         end
 
         private
+
+        def binance_uris(tld)
+          {
+            spot: {
+              test: "https://testnet.binance.vision",
+              prod: "https://api.binance.#{tld}"
+            },
+            futures: {
+              test: "https://testnet.binancefuture.com",
+              prod: "https://fapi.binance.com"
+            }
+          }
+        end
 
         def default_headers(api_key_type:, security_type:, api_key: nil)
           headers = {}
