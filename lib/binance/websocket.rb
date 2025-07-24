@@ -3,7 +3,7 @@ module Binance
     class Error < StandardError; end
 
     def initialize(on_open: nil, on_close: nil)
-      wss_uri = ENV['BINANCE_TEST_NET_ENABLE'] ? "wss://testnet.binance.vision/stream" : "wss://stream.binance.com:9443/stream"
+      wss_uri = ENV['BINANCE_TEST_NET_ENABLE'] ? 'wss://testnet.binance.vision/stream' : 'wss://stream.binance.com:9443/stream'
 
       super wss_uri, nil, ping: 180
 
@@ -80,6 +80,96 @@ module Binance
       subscribe(symbols_fmt.map { |s| "#{s.downcase}@trade" })
     end
 
+    # stream name: <symbol>@depth OR <symbol>@depth@500ms OR <symbol>@depth@100ms
+    # {
+    #   "e": "depthUpdate", // Event type
+    #   "E": 1571889248277, // Event time
+    #   "T": 1571889248276, // Transaction time
+    #   "s": "BTCUSDT",
+    #   "U": 390497796,     // First update ID in event
+    #   "u": 390497878,     // Final update ID in event
+    #   "pu": 390497794,    // Final update Id in last stream(ie `u` in last stream)
+    #   "b": [              // Bids to be updated
+    #     [
+    #       "7403.89",      // Price Level to be updated
+    #       "0.002"         // Quantity
+    #     ],
+    #     [
+    #       "7403.90",
+    #       "3.906"
+    #     ],
+    #     [
+    #       "7404.00",
+    #       "1.428"
+    #     ],
+    #     [
+    #       "7404.85",
+    #       "5.239"
+    #     ],
+    #     [
+    #       "7405.43",
+    #       "2.562"
+    #     ],
+    #   ],
+    #   "a": [              // Asks to be updated
+    #     [
+    #       "7405.96",      // Price level to be
+    #       "3.340"         // Quantity
+    #     ],
+    #     [
+    #       "7406.63",
+    #       "4.525"
+    #     ],
+    #     [
+    #       "7407.08",
+    #       "2.475"
+    #     ],
+    #     [
+    #       "7407.15",
+    #       "4.800"
+    #     ],
+    #     [
+    #       "7407.20",
+    #       "0.175"
+    #     ],
+    #   ],
+    # ]
+
+    def partial_book_depth!(symbols, level, update_speed = nil, &on_receive)
+      symbols_fmt = symbols.is_a?(String) ? [symbols] : symbols
+      @book_depth_handler = on_receive
+      subscribe(symbols_fmt.map { |s| "#{s.downcase}@depth#{level}#{update_speed ? "@#{update_speed}ms" : ''}" })
+    end
+
+    # stream name: <symbol>@depth OR <symbol>@depth@500ms OR <symbol>@depth@100ms
+    # {
+    #   "e": "depthUpdate", // Event type
+    #   "E": 123456789,     // Event time
+    #   "T": 123456788,     // Transaction time
+    #   "s": "BTCUSDT",     // Symbol
+    #   "U": 157,           // First update ID in event
+    #   "u": 160,           // Final update ID in event
+    #   "pu": 149,          // Final update Id in last stream(ie `u` in last stream)
+    #   "b": [              // Bids to be updated
+    #     [
+    #       "0.0024",       // Price level to be updated
+    #       "10"            // Quantity
+    #     ]
+    #   ],
+    #   "a": [              // Asks to be updated
+    #     [
+    #       "0.0026",       // Price level to be updated
+    #       "100"          // Quantity
+    #     ]
+    #   ]
+    # }
+
+    def book_depth!(symbols, update_speed = nil, &on_receive)
+      symbols_fmt = symbols.is_a?(String) ? [symbols] : symbols
+      @book_depth_handler = on_receive
+      subscribe(symbols_fmt.map { |s| "#{s.downcase}@depth#{update_speed ? "@#{update_speed}ms" : ''}" })
+    end
+
     private
 
     def process_data(data)
@@ -92,6 +182,8 @@ module Binance
         case json[:data][:e]&.to_sym
         when :kline
           @candlesticks_handler&.call(json[:stream], json[:data])
+        when :depthUpdate
+          @book_depth_handler&.call(json[:stream], json[:data])
         when :outboundAccountPosition
         when :balanceUpdate
         when :executionReport # order update
@@ -109,9 +201,9 @@ module Binance
 
     def subscribe(streams)
       send({
-        method: "SUBSCRIBE",
+        method: 'SUBSCRIBE',
         params: streams,
-        id: request_id,
+        id: request_id
       }.to_json)
     end
 
