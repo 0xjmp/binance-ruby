@@ -170,6 +170,11 @@ module Binance
       subscribe(symbols_fmt.map { |s| "#{s.downcase}@depth#{update_speed ? "@#{update_speed}ms" : ''}" })
     end
 
+    def book_depth_unsubscribe!(symbols, update_speed = nil)
+      symbols_fmt = symbols.is_a?(String) ? [symbols] : symbols
+      unsubscribe(symbols_fmt.map { |s| "#{s.downcase}@depth#{update_speed ? "@#{update_speed}ms" : ''}" })
+    end
+
     private
 
     def process_data(data)
@@ -210,12 +215,12 @@ module Binance
     # Terminating socket connection achieves the same result.
     # If you have a use-case for this, please create a GitHub issue.
     #
-    # def unsubscribe(streams)
-    #   send({
-    #     method: "UNSUBSCRIBE",
-    #     params: streams,
-    #     id: request_id,
-    #   }.to_json)
-    # end
+    def unsubscribe(streams)
+      send({
+        method: "UNSUBSCRIBE",
+        params: streams,
+        id: request_id,
+      }.to_json)
+    end
   end
 end
